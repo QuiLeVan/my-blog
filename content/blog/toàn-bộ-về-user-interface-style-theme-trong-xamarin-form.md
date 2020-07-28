@@ -153,8 +153,92 @@ description: "Những kiến thức về UI : Style, Theme .. trong Xamarin Form
         }
     }
     ```
-* Device Styles
-* Style Classes
+* Device Styles: X.F chứa 6 loại để hiển thị cho phần Label:
+
+  * BodyStyle
+  * CaptionStyle
+  * ListItemDetailTextStyle
+  * ListItemTextStyle
+  * SubtitleStyle
+  * TitleStyle
+
+  ```xml
+  <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Styles.DeviceStylesPage" Title="Device" IconImageSource="xaml.png">
+      <ContentPage.Resources>
+          <ResourceDictionary>
+              <Style x:Key="myBodyStyle" TargetType="Label"
+                BaseResourceKey="BodyStyle">
+                  <Setter Property="TextColor" Value="Accent" />
+              </Style>
+          </ResourceDictionary>
+      </ContentPage.Resources>
+      <ContentPage.Content>
+          <StackLayout Padding="0,20,0,0">
+              <Label Text="Title style"
+                Style="{DynamicResource TitleStyle}" />
+              <Label Text="Subtitle text style"
+                Style="{DynamicResource SubtitleStyle}" />
+              <Label Text="Body style"
+                Style="{DynamicResource BodyStyle}" />
+              <Label Text="Caption style"
+                Style="{DynamicResource CaptionStyle}" />
+              <Label Text="List item detail text style"
+                Style="{DynamicResource ListItemDetailTextStyle}" />
+              <Label Text="List item text style"
+                Style="{DynamicResource ListItemTextStyle}" />
+              <Label Text="No style" />
+              <Label Text="My body style"
+                Style="{StaticResource myBodyStyle}" />
+          </StackLayout>
+      </ContentPage.Content>
+  </ContentPage>
+  ```
+* Style Classes: để sử dụng nhiều style cho 1 TargetType: vd BoxView có nhiều Style :
+
+  ```xml
+  <ContentPage ...>
+      <ContentPage.Resources>
+          <Style TargetType="BoxView"
+                 Class="Separator">
+              <Setter Property="BackgroundColor"
+                      Value="#CCCCCC" />
+              <Setter Property="HeightRequest"
+                      Value="1" />
+          </Style>
+
+          <Style TargetType="BoxView"
+                 Class="Rounded">
+              <Setter Property="BackgroundColor"
+                      Value="#1FAECE" />
+              <Setter Property="HorizontalOptions"
+                      Value="Start" />
+              <Setter Property="CornerRadius"
+                      Value="10" />
+          </Style>    
+
+          <Style TargetType="BoxView"
+                 Class="Circle">
+              <Setter Property="BackgroundColor"
+                      Value="#1FAECE" />
+              <Setter Property="WidthRequest"
+                      Value="100" />
+              <Setter Property="HeightRequest"
+                      Value="100" />
+              <Setter Property="HorizontalOptions"
+                      Value="Start" />
+              <Setter Property="CornerRadius"
+                      Value="50" />
+          </Style>
+
+          <Style TargetType="VisualElement"
+                 Class="Rotated"
+                 ApplyToDerivedTypes="true">
+              <Setter Property="Rotation"
+                      Value="45" />
+          </Style>        
+      </ContentPage.Resources>
+  </ContentPage>
+  ```
 
 ### Sử dụng Style với CSS:
 
