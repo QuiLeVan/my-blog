@@ -1,8 +1,8 @@
 ---
 path: User Interface (UI) trong Xamarin
 date: 2020-07-28T22:08:22.628Z
-title: "Toàn bộ về User Interface : Style, Theme .. trong Xamarin Form"
-description: Những kiến thức về UI trong Xamarin.
+title: User Interface (UI) trong Xamarin
+description: "Những kiến thức về UI : Style, Theme .. trong Xamarin Form"
 ---
 ## Style trong Xamarin Form là gì và cách sử dụng như thế nào?
 
