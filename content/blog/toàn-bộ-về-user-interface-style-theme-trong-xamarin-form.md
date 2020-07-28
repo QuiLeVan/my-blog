@@ -34,10 +34,125 @@ description: "Những kiến thức về UI : Style, Theme .. trong Xamarin Form
       </ContentPage.Content>
   </ContentPage>
   ```
-* Implicit Styles
-* Global Styles
-* Style Inheritance
-* Dynamic Styles
+* Implicit Styles: Sử dụng để apply chung cho 1 TargetType vd: Button/ Label ...
+
+  ```xml
+  <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:Styles;assembly=Styles" x:Class="Styles.ImplicitStylesPage" Title="Implicit" IconImageSource="xaml.png">
+      <ContentPage.Resources>
+          <ResourceDictionary>
+              <Style TargetType="Entry">
+                  <Setter Property="HorizontalOptions" Value="Fill" />
+                  <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                  <Setter Property="BackgroundColor" Value="Yellow" />
+                  <Setter Property="FontAttributes" Value="Italic" />
+                  <Setter Property="TextColor" Value="Blue" />
+              </Style>
+          </ResourceDictionary>
+      </ContentPage.Resources>
+      <ContentPage.Content>
+          <StackLayout Padding="0,20,0,0">
+              <Entry Text="These entries" />
+              <Entry Text="are demonstrating" />
+              <Entry Text="implicit styles," />
+              <Entry Text="and an implicit style override" BackgroundColor="Lime" TextColor="Red" />
+              <local:CustomEntry Text="Subclassed Entry is not receiving the style" />
+          </StackLayout>
+      </ContentPage.Content>
+  </ContentPage>
+  ```
+* Global Styles: Để sử dụng chung cho toàn pages (ResourceDictionary tại App.xaml ), tránh việc lặp đi lặp lại việc tạo style giữa các page , có thể override style tại resource page / resource của từng phần tử.
+* Style Inheritance: Để kế thừa lại từ style khác, mục đích tái sử dụng & ko duplicate. Sử dụng BaseOn:
+
+  ```xml
+  <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Styles.StyleInheritancePage" Title="Inheritance" IconImageSource="xaml.png">
+      <ContentPage.Resources>
+          <ResourceDictionary>
+              <Style x:Key="baseStyle" TargetType="View">
+                  <Setter Property="HorizontalOptions"
+                          Value="Center" />
+                  <Setter Property="VerticalOptions"
+                          Value="CenterAndExpand" />
+              </Style>
+              <Style x:Key="labelStyle" TargetType="Label"
+                     BasedOn="{StaticResource baseStyle}">
+                  ...
+                  <Setter Property="TextColor" Value="Teal" />
+              </Style>
+              <Style x:Key="buttonStyle" TargetType="Button"
+                     BasedOn="{StaticResource baseStyle}">
+                  <Setter Property="BorderColor" Value="Lime" />
+                  ...
+              </Style>
+          </ResourceDictionary>
+      </ContentPage.Resources>
+      <ContentPage.Content>
+          <StackLayout Padding="0,20,0,0">
+              <Label Text="These labels"
+                     Style="{StaticResource labelStyle}" />
+              ...
+              <Button Text="So is the button"
+                      Style="{StaticResource buttonStyle}" />
+          </StackLayout>
+      </ContentPage.Content>
+  </ContentPage>
+  ```
+* Dynamic Styles: Style sẽ ko thay đổi sau khi được assign. Sử dụng DynamicResource để giải quyết việc này. DynamicResource va StaticResource markup extension là giống nhau, chỉ khác StaticResource là : single dictionary lookup, và DynamicResource tồn lại liên kết đến Dictionary key -> khi dictionary entry đã liên kết với dictionary key bị thay đổi thì nó sẽ thay đổi theo -> UI sẽ được cập nhật. Tiến hành qua 2 bước:
+
+  * Khai báo dynamic style XAML file:
+
+    ```xml
+    <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Styles.DynamicStylesPage" Title="Dynamic" IconImageSource="xaml.png">
+        <ContentPage.Resources>
+            <ResourceDictionary>
+                <Style x:Key="baseStyle" TargetType="View">
+                  ...
+                </Style>
+                <Style x:Key="blueSearchBarStyle"
+                       TargetType="SearchBar"
+                       BasedOn="{StaticResource baseStyle}">
+                  ...
+                </Style>
+                <Style x:Key="greenSearchBarStyle"
+                       TargetType="SearchBar">
+                  ...
+                </Style>
+                ...
+            </ResourceDictionary>
+        </ContentPage.Resources>
+        <ContentPage.Content>
+            <StackLayout Padding="0,20,0,0">
+                <SearchBar Placeholder="These SearchBar controls"
+                           Style="{DynamicResource searchBarStyle}" />
+                ...
+            </StackLayout>
+        </ContentPage.Content>
+    </ContentPage>
+    ```
+  * Xử lý ở code-behind: 
+
+    ```csharp
+    public partial class DynamicStylesPage : ContentPage
+    {
+        bool originalStyle = true;
+
+        public DynamicStylesPage ()
+        {
+            InitializeComponent ();
+            Resources ["searchBarStyle"] = Resources ["blueSearchBarStyle"];
+        }
+
+        void OnButtonClicked (object sender, EventArgs e)
+        {
+            if (originalStyle) {
+                Resources ["searchBarStyle"] = Resources ["greenSearchBarStyle"];
+                originalStyle = false;
+            } else {
+                Resources ["searchBarStyle"] = Resources ["blueSearchBarStyle"];
+                originalStyle = true;
+            }
+        }
+    }
+    ```
 * Device Styles
 * Style Classes
 
