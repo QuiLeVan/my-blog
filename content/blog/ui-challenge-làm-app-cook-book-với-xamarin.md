@@ -20,6 +20,19 @@ Figma link: [here](https://www.figma.com/file/PR7CQoRfOGStg2c7qNWQCt/Cook-Book?n
 
 * Thiết kế trên iphoneX/XS
 * Color
+* Dùng font từ resource
+
+  * Import font.ttf & chuyển sang embed resource
+  * File AssemblyInfo.cs thêm code
+
+    ```csharp
+    [assembly: ExportFont("Cooking.ttf")]
+    ```
+  * Trong file xaml sử dụng:
+
+    ```xml
+    <Span Text="{x:Static local:IconFont.favorite_outline}" FontFamily="Cooking" FontSize="24" />
+    ```
 
 ## Tool sử dụng:
 
