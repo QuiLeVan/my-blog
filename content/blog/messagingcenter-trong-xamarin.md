@@ -25,8 +25,41 @@ Messaging Center hỗ trợ multicast ( đa hướng) : nhiều publishers có t
 
 ## Publish a message
 
+```csharp
+MessagingCenter.Send<MainPage>(this, "Hi");
+```
 
+hoặc
+
+```csharp
+MessagingCenter.Send<MainPage, string>(this, "Hi", "John");
+```
 
 ## Subscribe to a message
 
+```csharp
+MessagingCenter.Subscribe<MainPage> (this, "Hi", (sender) =>
+{
+    // Do something whenever the "Hi" message is received
+});
+```
+
+hoặc trường hợp get payload:
+
+```csharp
+MessagingCenter.Subscribe<MainPage, string>(this, "Hi", async (sender, arg) =>
+{
+    await DisplayAlert("Message received", "arg=" + arg, "OK");
+});
+```
+
+`The delegate that's executed by the Subscribe method will be executed on the same thread that publishes the message using the Send method.`
+
 ## Unsubscribe from a message
+
+```csharp
+MessagingCenter.Unsubscribe<MainPage>(this, "Hi");
+
+//hoặc
+MessagingCenter.Unsubscribe<MainPage, string>(this, "Hi");
+```
