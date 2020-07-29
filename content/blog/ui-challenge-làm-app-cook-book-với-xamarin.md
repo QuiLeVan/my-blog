@@ -38,13 +38,15 @@ Figma link: [here](https://www.figma.com/file/PR7CQoRfOGStg2c7qNWQCt/Cook-Book?n
 
 * <https://github.com/kphillpotts/XDtoXF>: tool export XD to Xaml.
 * Sharpnado.MaterialFrame
-* Xamarin.Forms.PancakeView
+* Xamarin.Forms.PancakeView ( [https://github.com/sthewissen/Xamarin.Forms.PancakeView/wiki/)](https://github.com/sthewissen/Xamarin.Forms.PancakeView/wiki/Shapes)
 * FFImageLoading.Svg.Forms
 * <https://www.sharpnado.com/materialframe-blur/>
+* Build font icon: <https://icomoon.io/app/#/select>
+* Chuyển font sang code: <https://andreinitescu.github.io/IconFont2Code/>
 
 ## Các bước thực hiện:
 
-1. #### Tạo project với VS 
+1. #### Tạo project với VS
 2. #### Config cho App:
 
 a. Style Color 
@@ -263,6 +265,6 @@ c. Cấu hình list view item với Collection View: ( data load về từ link:
       }
   ```
 
-#### 3. Build Detail Page: 
+#### 3. Build Detail Page:
 
 > Xem ở bài tiếp theo
