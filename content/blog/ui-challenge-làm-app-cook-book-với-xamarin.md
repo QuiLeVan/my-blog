@@ -40,7 +40,7 @@ Figma link: [here](https://www.figma.com/file/PR7CQoRfOGStg2c7qNWQCt/Cook-Book?n
 * Sharpnado.MaterialFrame
 * Xamarin.Forms.PancakeView ( [https://github.com/sthewissen/Xamarin.Forms.PancakeView/wiki/)](https://github.com/sthewissen/Xamarin.Forms.PancakeView/wiki/Shapes)
 * FFImageLoading.Svg.Forms
-* <https://www.sharpnado.com/materialframe-blur/>
+* [https://www.sharpnado.com/materialframe-blur/ (](https://www.sharpnado.com/materialframe-blur/)[https://github.com/roubachof/Sharpnado.MaterialFrame)](https://github.com/roubachof/Sharpnado.MaterialFrame)
 * Build font icon: <https://icomoon.io/app/#/select>
 * Chuyển font sang code: <https://andreinitescu.github.io/IconFont2Code/>
 
