@@ -28,9 +28,8 @@ Figma link: [here](https://www.figma.com/file/PR7CQoRfOGStg2c7qNWQCt/Cook-Book?n
 
 ## Các bước thực hiện:
 
-1. Tạo project với VS 
-
-2. Config cho App:
+1. #### Tạo project với VS 
+2. #### Config cho App:
 
 a. Style Color 
 
@@ -76,4 +75,24 @@ b. Cấu hình cho mainPage:
 * ![](../assets/topshape.svg)
 * Tạo thư mục `Resource` trong proj share để dùng chung
 * Kéo image svg phía trên vào , phải chuột item chọn `build action -> embed resource`
-* thêm nuget package : ffloadingimage
+* thêm nuget package : ffloadingimage.svg.form cho cả 3 (proj share/ ios/ android)
+* Edit text Cook book : vị trí & font size ( [https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/text/fonts)](https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/text/fonts)
+
+  ```xml
+  <Label Text="Cook book" Margin="32,0,16,16" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="{StaticResource app_title}" FontFamily=".SFUIText-Semibold" FontSize="34" />
+  ```
+* Add ff image svg before label Cook book.
+
+  ```
+  <ff:SvgCachedImage Margin="0,-160,0,0" Source="resource://topshape.svg" HeightRequest="400" VerticalOptions="Start" Aspect="AspectFill" />
+  ```
+
+c. Cấu hình list view item với Collection View: ( data load về từ link: https://www.thewissen.io/pancakes.json)
+
+* Xây dựng model pancake
+* Xây dựng phương thức load data.
+* Update Collection View
+
+#### 3. Build Detail Page: 
+
+> Xem ở bài tiếp theo
