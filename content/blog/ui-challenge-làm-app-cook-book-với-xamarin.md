@@ -90,8 +90,132 @@ b. Cấu hình cho mainPage:
 c. Cấu hình list view item với Collection View: ( data load về từ link: https://www.thewissen.io/pancakes.json)
 
 * Xây dựng model pancake
+
+  ```
+  public partial class Pancake
+      {
+          [JsonProperty("name")]
+          public string Name { get; set; }
+
+          [JsonProperty("origin")]
+          public string Origin { get; set; }
+
+          [JsonProperty("description")]
+          public string Description { get; set; }
+
+          [JsonProperty("imageUrl")]
+          public Uri ImageUrl { get; set; }
+
+          [JsonProperty("ingredients", NullValueHandling = NullValueHandling.Ignore)]
+          public Ingredient[] Ingredients { get; set; }
+
+          [JsonProperty("steps", NullValueHandling = NullValueHandling.Ignore)]
+          public string[] Steps { get; set; }
+      }
+
+      public partial class Ingredient
+      {
+          [JsonProperty("uom")]
+          public string Uom { get; set; }
+
+          [JsonProperty("ingredient")]
+          public string Name { get; set; }
+      }
+  ```
 * Xây dựng phương thức load data.
-* Update Collection View
+
+  ```
+  public static class PancakeService
+      {
+          static HttpClient httpClient;
+          static List<Pancake> pancakes;
+
+          public static async Task<List<Pancake>> GetPancakes()
+          {
+              if (pancakes != null)
+                  return pancakes;
+
+              if (httpClient == null)
+              {
+                  httpClient = new HttpClient();
+              }
+
+              var result = await httpClient.GetAsync("https://www.thewissen.io/pancakes.json");
+              var resultAsString = await result.Content.ReadAsStringAsync();
+
+              return JsonConvert.DeserializeObject<List<Pancake>>(resultAsString);
+          }
+      }
+  ```
+* Update Collection View ( Full source)
+
+  ```
+  <Grid>
+
+          <ff:SvgCachedImage Margin="0,-160,0,0" Source="resource://topshape.svg" HeightRequest="400" VerticalOptions="Start" Aspect="AspectFill" />
+
+          <CollectionView ItemsSource="{Binding .}" SelectionMode="Single" SelectionChanged="CollectionView_SelectionChanged">
+              <CollectionView.ItemsLayout>
+                  <LinearItemsLayout ItemSpacing="20" Orientation="Vertical" />
+              </CollectionView.ItemsLayout>
+              <CollectionView.Header>
+                  <Grid HeightRequest="120">
+                      <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="*"/>
+                          <ColumnDefinition Width="Auto"/>
+                      </Grid.ColumnDefinitions>
+
+                      <Label x:Name="title" Margin="32,0,16,16" Text="Cook Book" VerticalOptions="End" VerticalTextAlignment="Center" TextColor="{StaticResource app_title}" FontFamily=".SFUIText-Semibold" FontSize="34" />
+
+                      <Button x:Name="search" Grid.Column="1" Margin="0,0,32,16" FontFamily="Cooking" Text="{x:Static local:IconFont.search}" VerticalOptions="End" CornerRadius="20" HeightRequest="40" WidthRequest="40" FontSize="18" TextColor="{StaticResource app_title}" BackgroundColor="{StaticResource white}" />
+                  </Grid>
+              </CollectionView.Header>
+              <CollectionView.ItemTemplate>
+                  <DataTemplate>
+                      <StackLayout Padding="16,0">
+                          <yummy:PancakeView CornerRadius="20">
+                              <yummy:PancakeView.Shadow>
+                                  <yummy:DropShadow Color="#000000" Opacity="0.3" Offset="10,10" BlurRadius="10" />
+                              </yummy:PancakeView.Shadow>
+
+                              <Grid HeightRequest="480">
+                                  <Grid.RowDefinitions>
+                                      <RowDefinition Height="*" />
+                                      <RowDefinition Height="80" />
+                                  </Grid.RowDefinitions>
+
+                                  <Image Source="{Binding ImageUrl}" Aspect="AspectFill" Grid.RowSpan="2" />
+
+                                  <yummy:PancakeView Grid.Row="0" VerticalOptions="Start" HeightRequest="120">
+                                      <yummy:PancakeView.BackgroundGradientStops>
+                                          <yummy:GradientStopCollection>
+                                              <yummy:GradientStop Color="#CC000000" Offset="0" />
+                                              <yummy:GradientStop Color="Transparent" Offset="2" />
+                                          </yummy:GradientStopCollection>
+                                      </yummy:PancakeView.BackgroundGradientStops>
+                                  </yummy:PancakeView>
+
+                                  <Label Margin="16,16,0,0" FontSize="20" FontFamily=".SFUIText-Semibold" TextColor="{StaticResource white}">
+                                      <Label.FormattedText>
+                                          <FormattedString>
+                                              <Span Text="{x:Static local:IconFont.favorite_outline}" FontFamily="Cooking" FontSize="24" />
+                                              <Span Text=" 52" />
+                                          </FormattedString>
+                                      </Label.FormattedText>
+                                  </Label>
+
+                                  <sharpnado:MaterialFrame Grid.Row="1" CornerRadius="0" MaterialBlurStyle="Dark" MaterialTheme="AcrylicBlur" />
+
+                                  <Label Grid.Row="1" Margin="20" VerticalOptions="Center" Text="{Binding Name}" FontSize="28" FontFamily=".SFUIText-Semibold" TextColor="{StaticResource white}" />
+                              </Grid>
+
+                          </yummy:PancakeView>
+                      </StackLayout>
+                  </DataTemplate>
+              </CollectionView.ItemTemplate>
+          </CollectionView>
+      </Grid>
+  ```
 
 #### 3. Build Detail Page: 
 
