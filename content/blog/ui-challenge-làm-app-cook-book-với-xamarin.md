@@ -72,7 +72,8 @@ b. Cấu hình cho mainPage:
           </Grid>
   ```
 * Add Image topbar: data here
-* ![](../assets/topshape.svg)
+
+  ![](../assets/topshape.svg)
 * Tạo thư mục `Resource` trong proj share để dùng chung
 * Kéo image svg phía trên vào , phải chuột item chọn `build action -> embed resource`
 * thêm nuget package : ffloadingimage.svg.form cho cả 3 (proj share/ ios/ android)
@@ -83,7 +84,7 @@ b. Cấu hình cho mainPage:
   ```
 * Add ff image svg before label Cook book.
 
-  ```
+  ```xml
   <ff:SvgCachedImage Margin="0,-160,0,0" Source="resource://topshape.svg" HeightRequest="400" VerticalOptions="Start" Aspect="AspectFill" />
   ```
 
@@ -91,7 +92,7 @@ c. Cấu hình list view item với Collection View: ( data load về từ link:
 
 * Xây dựng model pancake
 
-  ```
+  ```csharp
   public partial class Pancake
       {
           [JsonProperty("name")]
@@ -124,7 +125,7 @@ c. Cấu hình list view item với Collection View: ( data load về từ link:
   ```
 * Xây dựng phương thức load data.
 
-  ```
+  ```csharp
   public static class PancakeService
       {
           static HttpClient httpClient;
@@ -149,7 +150,7 @@ c. Cấu hình list view item với Collection View: ( data load về từ link:
   ```
 * Update Collection View ( Full source)
 
-  ```
+  ```xml
   <Grid>
 
           <ff:SvgCachedImage Margin="0,-160,0,0" Source="resource://topshape.svg" HeightRequest="400" VerticalOptions="Start" Aspect="AspectFill" />
