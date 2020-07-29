@@ -19,12 +19,15 @@ Figma link: [here](https://www.figma.com/file/PR7CQoRfOGStg2c7qNWQCt/Cook-Book?n
 ## Một số chú ý về design Cook Book :
 
 * Thiết kế trên iphoneX/XS
-* a
+* Color
 
 ## Tool sử dụng:
 
 * <https://github.com/kphillpotts/XDtoXF>: tool export XD to Xaml.
-* a
+* Sharpnado.MaterialFrame
+* Xamarin.Forms.PancakeView
+* FFImageLoading.Svg.Forms
+* <https://www.sharpnado.com/materialframe-blur/>
 
 ## Các bước thực hiện:
 
@@ -216,6 +219,35 @@ c. Cấu hình list view item với Collection View: ( data load về từ link:
               </CollectionView.ItemTemplate>
           </CollectionView>
       </Grid>
+  ```
+
+  Code behind:
+
+  ```csharp
+  public partial class MainPage : ContentPage
+      {
+          public MainPage()
+          {
+              InitializeComponent();
+          }
+
+          protected async override void OnAppearing()
+          {
+              base.OnAppearing();
+
+              BindingContext = await PancakeService.GetPancakes();
+          }
+
+          async void CollectionView_SelectionChanged(System.Object sender, Xamarin.Forms.SelectionChangedEventArgs e)
+          {
+              var selectedItem = e.CurrentSelection.FirstOrDefault();
+
+              if (selectedItem != null)
+              {
+                  //await Navigation.PushAsync(new DetailPage(selectedItem as Pancake));
+              }
+          }
+      }
   ```
 
 #### 3. Build Detail Page: 
