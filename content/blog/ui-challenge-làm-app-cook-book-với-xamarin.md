@@ -72,3 +72,8 @@ b. Cấu hình cho mainPage:
               </Grid.ColumnDefinitions>
           </Grid>
   ```
+* Add Image topbar: data here
+* ![](../assets/topshape.svg)
+* Tạo thư mục `Resource` trong proj share để dùng chung
+* Kéo image svg phía trên vào , phải chuột item chọn `build action -> embed resource`
+* thêm nuget package : ffloadingimage
