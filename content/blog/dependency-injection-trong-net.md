@@ -133,7 +133,6 @@ Lúc này thì ta đã giảm được tất cả sự phụ thuộc cứng gi�
 > Có rất nhiều lợi ích mà nó mang lại, nhưng quan trọng nhất là 2 điều này:
 >
 > 1. Có thể quản lý được việc khởi tạo các thành phần phụ thuộc bên ngoài và sử dụng chúng. => Sử dụng Ioc Container, nó là gì, xem thêm [ở đây](https://blog.quilv.com/blog/ioc-container)
->
 > 2. Có khả năng dễ dàng test mỗi class độc lập bởi vì chúng ta có thể truyền vào một đối tượng giả, hoặc đối tượng mẫu vào thông qua constructor thay vì sử dụng một implementation cứng. Xem thêm ở bài [Unit Test](https://blog.quilv.com/blog/unit-test-trong-xamarin)
 
 Với các dependency thì thường sẽ có 1 container để chứa list các register & mapping giữa interfact và abstract types và instance mà được implement từ interface. 
@@ -141,3 +140,33 @@ Với các dependency thì thường sẽ có 1 container để chứa list các
 Có cách khác để inject (tiêm) các dêpndency( phụ thuộc) như: *property setter injection hoặc method call injection* nhưng ít sử dụng. Chỉ focus inject vào constructor.
 
 ## Dependency Injection trong Xamarin sử dụng ntn?
+
+Ở ViewModel, cụ thể là ProfileViewModel có cấu trúc như sau:
+
+```csharp
+public class ProfileViewModel : ViewModelBase  
+{  
+    private IOrderService _orderService;  
+
+    public ProfileViewModel(IOrderService orderService)  
+    {  
+        _orderService = orderService;  
+    }  
+    ...  
+}
+```
+
+Constructor của ProfileViewModel nhận 1 instance của interface IOrderService được tiêm vào từ 1 class khác. Sự phụ thuộc duy nhất trong class ProfileViewModel là trên interface IOrderService. Nên lúc này ProfileViewModel sẽ ko cần quan tâm đến việc khởi tạo đối tượng cho interface IOrderService. Lớp mà chịu trách nhiệm khởi tạo interface & tiêm nó vào ProfileViewModel thì nó được gọi là ***container ( IoC Container)***
+
+DI Container se làm giảm liên kết giữa các objects bằng cách cung cấp các việc để khởi tạo các đối tượng của lớp và quản lý vòng đời của chúng. Trong quá trình tạo các đối tượng, container sẽ chứa toàn bộ các phụ thuộc (depedency) mà các object cần, nếu như các phụ thuộc chưa được khởi tạo thì container sẽ giúp tạo & giải quyết các phụ thuộc trước.
+
+Chú ý nguyên văn:
+
+> Dependency injection can also be implemented manually using factories. However, using a container provides additional capabilities such as lifetime management, and registration through assembly scanning.
+
+Lợi ích khi sử dụng DI container:
+
+* A container removes the need for a class to locate its dependencies and manage their lifetimes.
+* A container allows mapping of implemented dependencies without affecting the class.
+* A container facilitates testability by allowing dependencies to be mocked.
+* A container increases maintainability by allowing new classes to be easily added to the app.
