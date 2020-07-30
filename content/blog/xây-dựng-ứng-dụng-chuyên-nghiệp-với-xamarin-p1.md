@@ -51,3 +51,5 @@ Tập trung vào các phần:
 * Custom Renderers
 * MessagingCenter
 * Custom Controls
+
+Kiến trúc Mobile App: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/introduction#mobile-app-solution
