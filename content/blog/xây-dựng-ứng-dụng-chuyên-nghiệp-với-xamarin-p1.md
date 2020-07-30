@@ -56,8 +56,6 @@ Tất cả vấn đề trên sẽ được hướng dẫn lần lượt qua các
 
 Kiến trúc Mobile App **eShopOnContainers**: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/introduction#mobile-app-solution
 
-
-
 | Folder      | Description                                                                                                       |
 | ----------- | ----------------------------------------------------------------------------------------------------------------- |
 | Animations  | Contains classes that enable animations to be consumed in XAML.                                                   |
@@ -76,8 +74,6 @@ Kiến trúc Mobile App **eShopOnContainers**: https://docs.microsoft.com/en-us/
 | ViewModels  | Contains the application logic that's exposed to pages.                                                           |
 | Views       | Contains the pages for the app.                                                                                   |
 
-
-
 ### App sẽ có các chức năng:
 
 * Quản lý danh mục
@@ -85,8 +81,29 @@ Kiến trúc Mobile App **eShopOnContainers**: https://docs.microsoft.com/en-us/
 * Quản lý giỏ hàng
 * Quản lý các đơn hàng
 
-Biểu đồ Kiến trúc:
+### Biểu đồ Kiến trúc:
 
 ![](../assets/eshoponcontainers_architecture_diagram.png)
 
-<img src="../assets/eshoponcontainers_architecture_diagram.png" alt="eShopOnContainers" Width="800" />
+
+
+### Các màn hình trong app:
+
+* a auth screen
+
+  ![](../assets/auth.png)
+* a catalog list
+
+  ![](../assets/catalog.png)
+* a profile section with a order list
+
+  ![](../assets/profile.png)
+* a readonly order detail screen
+
+  ![](../assets/orderdetail.png)
+* a customizable basket
+
+  ![](../assets/filter.png)
+* a checkout screen
+
+  ![](../assets/shoppingcart.png)
