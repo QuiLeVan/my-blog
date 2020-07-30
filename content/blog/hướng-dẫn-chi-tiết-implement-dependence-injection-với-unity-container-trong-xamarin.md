@@ -219,4 +219,4 @@ Trong xaml file:
 
 Như vậy là đã implement xong DI trong Xamarin sử dụng Unity Container.
 
-Full Source code : [check ở đây](github)
+Full Source code : [check ở đây](https://github.com/QuiLeVan/UnityContainerXamarinDemo)
