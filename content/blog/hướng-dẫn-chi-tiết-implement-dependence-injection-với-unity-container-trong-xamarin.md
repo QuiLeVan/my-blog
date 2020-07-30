@@ -8,9 +8,9 @@ description: Chi tiết cách thức implement DI với Unity Container.
 ---
 Để hiểu được bài này thì phải nắm được thế nào là [Dependence Injection](https://blog.quilv.com/blog/dependency-injection-trong-net/) (DI). Nếu chưa nắm được thì đọc [ở đây](https://blog.quilv.com/blog/dependency-injection-trong-net/).
 
-**ví dụ đơn giản:**
+## **Ví dụ đơn giản để hiểu cách sử dụng Dependence Injection :**
 
-Thiết kế ứng dụng load danh sách Product gồm 2 thông tin:
+### Thiết kế ứng dụng load danh sách Product gồm 2 thông tin:
 
 * Name
 * Price
