@@ -53,3 +53,23 @@ Tập trung vào các phần:
 * Custom Controls
 
 Kiến trúc Mobile App: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/introduction#mobile-app-solution
+
+
+
+| Folder      | Description                                                                                                       |
+| ----------- | ----------------------------------------------------------------------------------------------------------------- |
+| Animations  | Contains classes that enable animations to be consumed in XAML.                                                   |
+| Behaviors   | Contains behaviors that are exposed to view classes.                                                              |
+| Controls    | Contains custom controls used by the app.                                                                         |
+| Converters  | Contains value converters that apply custom logic to a binding.                                                   |
+| Effects     | Contains the `EntryLineColorEffect` class, which is used to change the border color of specific `Entry` controls. |
+| Exceptions  | Contains the custom `ServiceAuthenticationException`.                                                             |
+| Extensions  | Contains extension methods for the `VisualElement` and `IEnumerable` classes.                                     |
+| Helpers     | Contains helper classes for the app.                                                                              |
+| Models      | Contains the model classes for the app.                                                                           |
+| Properties  | Contains `AssemblyInfo.cs`, a .NET assembly metadata file.                                                        |
+| Services    | Contains interfaces and classes that implement services that are provided to the app.                             |
+| Triggers    | Contains the `BeginAnimation` trigger, which is used to invoke an animation in XAML.                              |
+| Validations | Contains classes involved in validating data input.                                                               |
+| ViewModels  | Contains the application logic that's exposed to pages.                                                           |
+| Views       | Contains the pages for the app.                                                                                   |
