@@ -19,6 +19,13 @@ Figma link: [here](https://www.figma.com/file/PR7CQoRfOGStg2c7qNWQCt/Cook-Book?n
 ## Một số chú ý về design Cook Book :
 
 * Thiết kế trên iphoneX/XS
+* Sử dụng SafeArea trên iphoneX
+
+  ```xml
+  <ContentPage ...
+            xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+            ios:Page.UseSafeArea="True"/>
+  ```
 * Color
 * Dùng font từ resource
 
