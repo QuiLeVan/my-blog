@@ -52,7 +52,9 @@ Tất cả vấn đề trên sẽ được hướng dẫn lần lượt qua các
 * MessagingCenter
 * Custom Controls
 
-Kiến trúc Mobile App: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/introduction#mobile-app-solution
+## Phân tích ứng dụng mẫu của microsoft trong việc xây dựng ứng dụng Enterprise:
+
+Kiến trúc Mobile App **eShopOnContainers**: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/introduction#mobile-app-solution
 
 
 
@@ -73,3 +75,18 @@ Kiến trúc Mobile App: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/
 | Validations | Contains classes involved in validating data input.                                                               |
 | ViewModels  | Contains the application logic that's exposed to pages.                                                           |
 | Views       | Contains the pages for the app.                                                                                   |
+
+
+
+### App sẽ có các chức năng:
+
+* Quản lý danh mục
+* Quản lý các sản phẩm.
+* Quản lý giỏ hàng
+* Quản lý các đơn hàng
+
+Biểu đồ Kiến trúc:
+
+![](../assets/eshoponcontainers_architecture_diagram.png)
+
+<img src="../assets/eshoponcontainers_architecture_diagram.png" alt="eShopOnContainers" Width="800" />
