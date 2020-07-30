@@ -25,8 +25,6 @@ Yêu cầu sử dụng Dependence Injection để giảm sự liên kết cứng
 
 ![](../assets/screen-shot-2020-07-30-at-15.48.33.png)
 
-
-
 ### Trong trường hợp không sử dụng DI, thì các class được cấu hình như sau:
 
 ![](../assets/screen-shot-2020-07-30-at-16.08.36.png)
@@ -80,8 +78,6 @@ public class ProductsViewModel
 ```
 
 Như trên, thì ta thấy sự liên kết cứng giữa ProductsViewModel & ProductService. Nếu trường hợp ProductService do bên thứ 3 cung cấp & họ bỏ phương thức khởi tạo ko có tham số, nếu như trong code chúng ta có rất nhiều chỗ implement phương thức khởi tạo đó, thì chúng ta phải thay đổi lại hết. Và cái này liên kết cứng nên chúng ta không thể viết Unit Test cho trường hợp này được.
-
-
 
 ## Tiến hành implement DI với Unity Container trong Xamarin.
 
@@ -147,8 +143,6 @@ public partial class App : Application
     }
 ```
 
-
-
 > Khi đối tượng của ProductViewModel được tạo, và nó yêu cầu truyền đối tượng IProductsService, và đối tượng này được tự động tạo ra từ ServiceLocator từ Unity Container. 
 
 Lúc này khi khởi chạy sẽ sinh 1 lỗi: không tìm thấy default constructor của class ProductViewModel, vì ProductsPage.xaml đang binding tới.
@@ -174,3 +168,55 @@ public partial class ProductsPage : ContentPage
     }
 }
 ```
+
+Cách 2: Sử dụng binding trên xaml với create ViewModelLocator:
+
+Tạo class ViewModelLocaltor trong folder ViewModels:
+
+```csharp
+public class ViewModelLocator
+{
+    public ProductsViewModel ProductsViewModel {
+        get
+        {
+            return ServiceLocator.Current.GetInstance<ProductsViewModel>();
+        }
+    }
+}
+```
+
+Tạo StaticResource trong App.xaml để sử dụng cho toàn proj với xaml file.
+
+```xml
+ <Application.Resources>
+    <ResourceDictionary>
+        <vm:ViewModelLocator x:Key="Locator"/>
+    </ResourceDictionary>
+</Application.Resources>
+```
+
+Trong xaml file:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:UnityIoCContainer.ViewModels"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="True"
+             x:Class="UnityIoCContainer.Views.ProductsPage"
+             BindingContext="{Binding ProductsViewModel, Source={StaticResource Locator}}">
+
+    <!--<ContentPage.BindingContext>
+        <viewModels:ProductsViewModel/>
+    </ContentPage.BindingContext>-->
+
+    <ContentPage.Content>
+        <ListView ItemsSource="{Binding Products}"/>
+    </ContentPage.Content>
+</ContentPage>
+```
+
+Như vậy là đã implement xong DI trong Xamarin sử dụng Unity Container.
+
+Full Source code : [check ở đây](github)
