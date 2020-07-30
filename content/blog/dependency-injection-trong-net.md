@@ -136,4 +136,8 @@ Lúc này thì ta đã giảm được tất cả sự phụ thuộc cứng gi�
 >
 > 2. Có khả năng dễ dàng test mỗi class độc lập bởi vì chúng ta có thể truyền vào một đối tượng giả, hoặc đối tượng mẫu vào thông qua constructor thay vì sử dụng một implementation cứng. Xem thêm ở bài [Unit Test](https://blog.quilv.com/blog/unit-test-trong-xamarin)
 
+Với các dependency thì thường sẽ có 1 container để chứa list các register & mapping giữa interfact và abstract types và instance mà được implement từ interface. 
+
+Có cách khác để inject (tiêm) các dêpndency( phụ thuộc) như: *property setter injection hoặc method call injection* nhưng ít sử dụng. Chỉ focus inject vào constructor.
+
 ## Dependency Injection trong Xamarin sử dụng ntn?
