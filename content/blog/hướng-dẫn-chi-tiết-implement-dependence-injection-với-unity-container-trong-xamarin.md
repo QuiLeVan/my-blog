@@ -161,4 +161,16 @@ Lúc này khi khởi chạy sẽ sinh 1 lỗi: không tìm thấy default constr
 
 Để giải quyết vấn đề này thì có 2 cách để xử lý:
 
-Cách 1:
+***Cách 1: Chuyển BindingContext vào code behind để xử lý.***
+
+```csharp
+public partial class ProductsPage : ContentPage
+{
+    public ProductsPage()
+    {
+        InitializeComponent();
+
+        BindingContext = ServiceLocator.Current.GetInstance<ProductsViewModel>();
+    }
+}
+```
