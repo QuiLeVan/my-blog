@@ -9,7 +9,7 @@ Trong phần này sẽ nói tóm lược về cuốn sách : Enterprise Applicat
 
 Tất cả phần này sẽ nói về cách implement mẫu MVVM, dependency injection , navigation, validation, và configuration management với việc duy trì các thành phần kết nối lỏng lẻo để có khả năng tích hợp unit test. Ngoài ra còn hướng dẫn tích hợp authentication & authorization với IdentityServer. Truy cập data từ các microservice & unit test.
 
-1 Ứng dụng thường sẽ :
+## 1 Ứng dụng Enterprise thường sẽ :
 
 * Có những yêu cầu thay đổi liên tục.
 * Có những cơ hội & thách thức kinh doanh mới phải thêm những cái mới.
@@ -36,7 +36,7 @@ Nhưng nó cũng có 1 số vấn đề cần phải giải quyết khi tách r�
 
 Tất cả vấn đề trên sẽ được hướng dẫn lần lượt qua các phần của serial : Xây dựng ứng dụng chuyên nghiệp với Xamarin.
 
-Tập trung vào các phần:
+## Xây dựng ứng dụng chuyên nghiệp với Xamarin sẽ tập trung vào các phần:
 
 * XAML
 * Controls
