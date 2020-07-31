@@ -4,8 +4,6 @@ date: 2020-07-31T08:09:49.162Z
 title: Architecture - Kiến trúc trong lập trình
 description: Kiến trúc nói chung & trong Xamarin nói riêng.
 ---
-
-
 A key tenet of building cross-platform apps is to create an architecture that lends itself to a maximization of code sharing across platforms. Adhering to the following Object Oriented Programming principles helps build a well-architected application:
 
 * **Encapsulation** – Ensuring that classes and even architectural layers only expose a minimal API that performs their required functions, and hides the implementation details. At a class level, this means that objects behave as ‘black boxes’ and that consuming code does not need to know how they accomplish their tasks. At an architectural level, it means implementing patterns like Façade that encourage a simplified API that orchestrates more complex interactions on behalf of the code in more abstract layers. This means that the UI code (for example) should only be responsible for displaying screens and accepting user-input; and never interacting with the database directly. Similarly the data-access code should only read and write to the database, but never interact directly with buttons or labels.
@@ -14,9 +12,9 @@ A key tenet of building cross-platform apps is to create an architecture that le
 
 The natural outcome is an application modeled after real world or abstract entities with separate logical layers. Separating code into layers make applications easier to understand, test and maintain. It is recommended that the code in each layer be physically separate (either in directories or even separate projects for very large applications) as well as logically separate (using namespaces).
 
-[](<>)
+## Typical Application Layers
 
-## [](https://docs.microsoft.com/vi-vn/xamarin/cross-platform/app-fundamentals/building-cross-platform-applications/architecture#typical-application-layers)Typical Application Layers
+![](https://docs.microsoft.com/vi-vn/xamarin/cross-platform/app-fundamentals/building-cross-platform-applications/case-study-tasky-images/classdiagram-core.png)
 
 Throughout this document and the case studies we refer to the following six application layers:
 
