@@ -6,26 +6,32 @@ description: Tất cả mọi vấn đề về share code trong Xamarin.
 ---
 Hiện tại trong Xamarin sử dụng 2 loại : .NET standard libraries và Shared Projects. Portable Class Libraries vẫn còn support nhưng đang được xem xét thay thế bằng .NET standard libraries.
 
-## Share code bằng .NET Standard 
+## Share code bằng .NET Standard
+![](https://docs.microsoft.com/vi-vn/xamarin/cross-platform/app-fundamentals/code-sharing-images/netstandard.png)
 
-detail...
+* .NET Standard libraries có API thống nhất được dùng cho Xamarin và .NET CORE. Có thể implement code để sử dụng cho nhiều platform.
+* xuất dll file để chạy trên ios/ android /...
+* Sử dụng Device.RuntimePlatform để kiểm tra Device.ios / Device.Android ...
 
 ## Share code bằng Share Projects
+![](https://docs.microsoft.com/vi-vn/xamarin/cross-platform/app-fundamentals/code-sharing-images/sharedassetproject.png)
+* Loại Shared Asset Project (sử dụng chung asset) để sử dụng mã nguồn chung với nhau.
+* Dùng #if để chạy theo yêu cầu của từng nền tảng cụ thể.
+* Làm khó quản lý code trong các proj lớn.
 
-detail...
+## Share code bằng Portable Class Libraries ( deprecated)
 
-## Share code bằng Portable Class Libraries
-
-detail...
+* xuất dll file & hỗ trợ đa nền tảng giống như .NET Standard nhưng đã lỗi thời.
+* Giờ .NET Standard có thể thay thế.
 
 ## NuGet Project: Thư viện đa nền tảng cho share code.
 
-detail...
+Cập nhật sau ...
 
 ## Tự tạo gói Nuget cho Xamarin.
 
-detail...
+Cập nhật sau ...
 
 ## Sử dụng thư viện C/C++ trong Xamarin
 
-detail...
+Cập nhật sau ...
