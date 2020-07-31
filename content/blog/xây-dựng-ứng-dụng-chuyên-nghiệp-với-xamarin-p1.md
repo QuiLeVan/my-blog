@@ -23,7 +23,7 @@ Cách giải quyết vấn đề trên là tách rời các thành phần của 
 * Nó thúc đẩy việc tách rời các thành phần với nhau & tăng khả năng tái sử dụng.
 * Tách biệt vai trò của nhóm và mỗi nhóm sẽ có khả năng tập trung vào chuyên môn của mình. 
 
-Nhưng nó cũng có 1 số vấn đề cần phải giải quyết khi tách rời các thành phần như:
+***Nhưng nó cũng có 1 số vấn đề cần phải giải quyết khi tách rời các thành phần như:***
 
 * Làm thế nào để tách rời các thành phần UI & Business Logic ( MVVM)
 * Xác định các thành phần nào sẽ sử dụng dependency injection container
@@ -54,7 +54,7 @@ Tất cả vấn đề trên sẽ được hướng dẫn lần lượt qua các
 
 ## Phân tích ứng dụng mẫu của microsoft trong việc xây dựng ứng dụng Enterprise:
 
-Kiến trúc Mobile App **eShopOnContainers**: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/introduction#mobile-app-solution
+Kiến trúc Mobile App **eShopOnContainers**:
 
 | Folder      | Description                                                                                                       |
 | ----------- | ----------------------------------------------------------------------------------------------------------------- |
@@ -84,8 +84,6 @@ Kiến trúc Mobile App **eShopOnContainers**: https://docs.microsoft.com/en-us/
 ### Biểu đồ Kiến trúc:
 
 ![](../assets/eshoponcontainers_architecture_diagram.png)
-
-
 
 ### Các màn hình trong app:
 
