@@ -14,7 +14,12 @@ The natural outcome is an application modeled after real world or abstract entit
 
 ## Typical Application Layers
 
+*Image 1: *
 ![](https://docs.microsoft.com/vi-vn/xamarin/cross-platform/app-fundamentals/building-cross-platform-applications/case-study-tasky-images/classdiagram-core.png)
+
+*Image 2:*
+
+![](https://docs.microsoft.com/vi-vn/xamarin/cross-platform/app-fundamentals/building-cross-platform-applications/case-study-tasky-images/classdiagram-android.png)
 
 Throughout this document and the case studies we refer to the following six application layers:
 
