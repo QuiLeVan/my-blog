@@ -10,11 +10,11 @@ description: "Mobile apps có những vấn đề đặc biệt mà trên deskto
 ---
 Có rất nhiều loại test trên mobile, điển hình như: unit testing, integration testing & user interface testing. Nhưng với unit testing là phổ biến nhất, trong bài này sẽ chỉ tập trung vào unit test.
 
-Unit Test là gì ?
+## Unit Test là gì ?
 
-Tại sao cần có Unit Test?
+## Tại sao cần có Unit Test?
 
-1 dự án thì tiến hành implement Unit Test như thế nào ?
+## 1 dự án thì tiến hành implement Unit Test như thế nào ?
 
 Tổng Kết:
 
