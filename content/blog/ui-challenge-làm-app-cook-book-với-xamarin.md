@@ -277,4 +277,4 @@ c. Cấu hình list view item với Collection View: ( data load về từ link:
 
 #### 3. Build Detail Page:
 
-> Xem ở bài tiếp theo
+> Sẽ Cập Nhật Sau...
