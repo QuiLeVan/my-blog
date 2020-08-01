@@ -1,7 +1,7 @@
 ---
-path: Xây dựng ứng dụng chuyên nghiệp với Xamarin p1
+path: Xây dựng ứng dụng chuyên nghiệp với Xamarin
 date: 2020-07-30T14:44:20.479Z
-title: Xây dựng ứng dụng chuyên nghiệp với Xamarin p1
+title: Xây dựng ứng dụng chuyên nghiệp với Xamarin
 description: "Xây dựng kiến trúc ứng dụng trong xamarin với mục tiêu :
   adaptable, maintainable and testable"
 ---
@@ -25,14 +25,14 @@ Cách giải quyết vấn đề trên là tách rời các thành phần của 
 
 ***Nhưng nó cũng có 1 số vấn đề cần phải giải quyết khi tách rời các thành phần như:***
 
-* Làm thế nào để tách rời các thành phần UI & Business Logic ( MVVM)
-* Xác định các thành phần nào sẽ sử dụng dependency injection container
-* Xác định việc liên lạc giữa các thành phần trong ứng dụng ntn mà vẫn tạo được sự kết nối lỏng lẻo ( MessengingCenter)
-* Quyết định việc điều hướng giữa các page, làm thế nào để điều hướng ( Navigation)
-* Xác thực đầu vào để tránh ứng dụng  bị lỗi ( Validation)
-* Xác định Auth & làm sao để bảo mật được thông tin ( Authorization & Authentication)
-* Truy cập dữ liệu từ xa, từ web service & cache chúng. ( Access Remote Data)
-* Cách thức testing app. ( Unit Testing)
+* Làm thế nào để tách rời các thành phần UI & Business Logic (Xem phần [MVVM - trong Enterprise App]())
+* Xác định các thành phần nào sẽ sử dụng dependency injection container ([Implement DI](https://blog.quilv.com/blog/h%C6%B0%E1%BB%9Bng-d%E1%BA%ABn-chi-ti%E1%BA%BFt-implement-dependence-injection-v%E1%BB%9Bi-unity-container-trong-xamarin/))
+* Xác định việc liên lạc giữa các thành phần trong ứng dụng ntn mà vẫn tạo được sự kết nối lỏng lẻo ( xem [MessengingCenter](https://blog.quilv.com/blog/messagingcenter-trong-xamarin/))
+* Quyết định việc điều hướng giữa các page, làm thế nào để điều hướng ( xem [Navigation]())
+* Xác thực đầu vào để tránh ứng dụng  bị lỗi ( xem [Validation]())
+* Xác định Auth & làm sao để bảo mật được thông tin ( xem [Authorization & Authentication]())
+* Truy cập dữ liệu từ xa, từ web service & cache chúng. ( xem [Access Remote Data]())
+* Cách thức testing app. (xem [Unit Testing](https://blog.quilv.com/blog/unit-test-trong-enterprise-apps/) )
 
 Tất cả vấn đề trên sẽ được hướng dẫn lần lượt qua các phần của serial : Xây dựng ứng dụng chuyên nghiệp với Xamarin.
 
