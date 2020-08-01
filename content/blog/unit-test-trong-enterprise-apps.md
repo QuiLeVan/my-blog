@@ -51,7 +51,7 @@ public class OrderDetailViewModel : ViewModelBase
 }
 ```
 
-`OrderDetailViewModel` class có phụ thuộc vào `IOrderService` type với `container` khi mà khởi tạo đối tượng `OrderDetailViewModel`. Xem thêm phần Denpendence Injection (DI) để rõ hơn. Lúc này để test `OrderDetailViewModel` class thì chúng ta sẽ tạo 1 đối tượng `OrderService` giả ( mock ) cho mục đích test. 
+`OrderDetailViewModel` class có phụ thuộc vào `IOrderService` type với `container` khi mà khởi tạo đối tượng `OrderDetailViewModel`. Xem thêm phần [Denpendence Injection (DI)](https://blog.quilv.com/blog/dependency-injection-trong-net/) để rõ hơn. Lúc này để test `OrderDetailViewModel` class thì chúng ta sẽ tạo 1 đối tượng `OrderService` giả ( mock ) cho mục đích test. 
 
 Xem hình dưới:
 
@@ -108,12 +108,134 @@ Khi `OrderDetailViewModel` được khởi tạo thì nó sẽ mong đợi 1 tha
 
 ##### 2.2 Testing INotifyPropertyChanged Implementations
 
+Khi implement INotifyPropertyChange thì `view` sẽ cập nhật những thay đổi bắt nguồn từ `view models` và `model`.
+
+Những thuộc tính này cũng có thể được update trực tiếp thông qua unit test bằng cách attach `event handler` vào trong sự kiện `PropertiyChanged`. Khi giá trị được thay đổi thì sự kiện sẽ được gọi theo như ví dụ sau:
+
+```csharp
+[Fact]  
+public async Task SettingOrderPropertyShouldRaisePropertyChanged()  
+{  
+    bool invoked = false;  
+    var orderService = new OrderMockService();  
+    var orderViewModel = new OrderDetailViewModel(orderService);  
+
+    orderViewModel.PropertyChanged += (sender, e) =>  
+    {  
+        if (e.PropertyName.Equals("Order"))  
+            invoked = true;  
+    };  
+    var order = await orderService.GetOrderAsync(1, GlobalSetting.Instance.AuthToken);  
+    await orderViewModel.InitializeAsync(order);  
+
+    Assert.True(invoked);  
+}
+```
+
+Unit test này sẽ gọi `InitializeAsync` của lớp `OrderDetailViewModel`, điều này khiến cho `Order` sẽ update & unit test sẽ được pass vì sự kiện `PropertyChanged` sẽ được gọi cho thuộc tính `Order`.
+
 ##### 2.3 Testing Message-based Communication
+
+View Model mà dùng [MessagingCenter](https://blog.quilv.com/blog/messagingcenter-trong-xamarin/) để trao đổi dữ liệu với nhau giữa các lớp liên kết lỏng lẻo 
+thì có thể thực hiện được unit test bằng cách đăng ký lắng nghe đến message được gửi đi bằng code đang thử nghiệm như ví dụ:
+
+```csharp
+[Fact]  
+public void AddCatalogItemCommandSendsAddProductMessageTest()  
+{  
+    bool messageReceived = false;  
+    var catalogService = new CatalogMockService();  
+    var catalogViewModel = new CatalogViewModel(catalogService);  
+
+    Xamarin.Forms.MessagingCenter.Subscribe<CatalogViewModel, CatalogItem>(  
+        this, MessageKeys.AddProduct, (sender, arg) =>  
+    {  
+        messageReceived = true;  
+    });  
+    catalogViewModel.AddCatalogItemCommand.Execute(null);  
+
+    Assert.True(messageReceived);  
+}
+```
+
+Unit Test này kiểm tra `CatalogViewModel` gửi tin `AddProduct`  message để đáp ứng việc xử lý `AddCatalogItemCommand` khi được gọi. 
+Bởi vì MesseagingCenter hỗ trợ việc đăng ký nhận nhiều tin, nên unit test có thể đăng ký lắng nghe tin nhắn `AddProduct` và thực hiện callback được nhận lại từ nó. 
 
 ##### 2.4 Testing Exception Handling
 
+ví dụ:
+```csharp
+[Fact]  
+public void InvalidEventNameShouldThrowArgumentExceptionText()  
+{  
+    var behavior = new MockEventToCommandBehavior  
+    {  
+        EventName = "OnItemTapped"  
+    };  
+    var listView = new ListView();  
+
+    Assert.Throws<ArgumentException>(() => listView.Behaviors.Add(behavior));  
+}
+```
+
+Unit Test này sẽ ném ra lỗi, vì list view hiện tại ko có sự kiện nào tên : `OnItemTapped`.
+
+> Tips:
+
+> Avoid writing unit tests that examine exception message strings. Exception message strings might change over time, and so unit tests that rely on their presence are regarded as brittle.
+
 ##### 2.5 Testing Validation
 
+Có 2 khía cạnh để test trường hợp này:
+
+* 1 là test bất kỳ cái rule nào được cho là chính xác.
+* 2 là test `ValidatableObject<T>` như mong đợi.
+
+Logic Validation thường dễ dàng test vì thường nó là một quá trình khép kín phụ thuộc đầu vào - đầu ra. 
+Cần phải kiểm tra kết quả của `Validate` method mà mỗi giá trị có 1 ít nhất qui tắc xác nhận liên quan như sau:
+
+```csharp
+[Fact]  
+public void CheckValidationPassesWhenBothPropertiesHaveDataTest()  
+{  
+    var mockViewModel = new MockViewModel();  
+    mockViewModel.Forename.Value = "John";  
+    mockViewModel.Surname.Value = "Smith";  
+
+    bool isValid = mockViewModel.Validate();  
+
+    Assert.True(isValid);  
+}
+```
+
+Unit Test này hợp lệ khi mock data đều có chứa 2 thuộc tính đó.
+
+Unit Test cũng test trên các trường hợp inValid, Error...
+
+```csharp
+[Fact]  
+public void CheckValidationFailsWhenOnlyForenameHasDataTest()  
+{  
+    var mockViewModel = new MockViewModel();  
+    mockViewModel.Forename.Value = "John";  
+
+    bool isValid = mockViewModel.Validate();  
+
+    Assert.False(isValid);  
+    Assert.NotNull(mockViewModel.Forename.Value);  
+    Assert.Null(mockViewModel.Surname.Value);  
+    Assert.True(mockViewModel.Forename.IsValid);  
+    Assert.False(mockViewModel.Surname.IsValid);  
+    Assert.Empty(mockViewModel.Forename.Errors);  
+    Assert.NotEmpty(mockViewModel.Surname.Errors);  
+}
+```
+
 ## Tổng Kết:
+
+* Unit Test thường test những đơn vị nhỏ của app, thường là method. Những thành phần mà độc lập với các phần khác & xác thực được chúng đúng chức năng theo mong đợi.
+* Mục tiêu là các function hoạt động đúng với chức năng mong muốn & không có những error được lan truyền ra các thành phần khác của app.
+* Các behavior của các object được test có thể được thay các đối tượng phụ thuộc bằng các đối tượng giả để test.(cái mà có thể mô phỏng được các đối tượng phụ thuộc).
+* Kích hoạt unit test để thực hiện các chức năng mà ko cần phải sử dụng các web service hay database ..
 
 Nguồn từ: `https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/unit-testing`
