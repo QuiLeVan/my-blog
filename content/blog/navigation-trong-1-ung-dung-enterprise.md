@@ -92,17 +92,220 @@ public partial class CustomNavigationView : NavigationPage
 }
 ```
 
+Mục đích của điều này là để giảm bớt style NavigationPage trong XAML. 
+
+Navigation sẽ được thực hiện bên trong logic của view-model bằng cách gọi hàm như sau:
+
+```csharp
+await NavigationService.NavigateToAsync<MainViewModel>();
+```
+
+Phía code `NavigateToAsync` sẽ được impelement như sau:
+
+```csharp
+public Task NavigateToAsync<TViewModel>() where TViewModel : ViewModelBase  
+{  
+    return InternalNavigateToAsync(typeof(TViewModel), null);  
+}  
+
+public Task NavigateToAsync<TViewModel>(object parameter) where TViewModel : ViewModelBase  
+{  
+    return InternalNavigateToAsync(typeof(TViewModel), parameter);  
+}
+
+```
+
+Mỗi method đều chấp nhận bất kỳ view-model nào mà kế thừa từ `ViewModelBase`. 
+
+`InternalNavigateToAsync` được implement:
+
+```csharp
+private async Task InternalNavigateToAsync(Type viewModelType, object parameter)  
+{  
+    Page page = CreatePage(viewModelType, parameter);  
+
+    if (page is LoginView)  
+    {  
+        Application.Current.MainPage = new CustomNavigationView(page);  
+    }  
+    else  
+    {  
+        var navigationPage = Application.Current.MainPage as CustomNavigationView;  
+        if (navigationPage != null)  
+        {  
+            await navigationPage.PushAsync(page);  
+        }  
+        else  
+        {  
+            Application.Current.MainPage = new CustomNavigationView(page);  
+        }  
+    }  
+
+    await (page.BindingContext as ViewModelBase).InitializeAsync(parameter);  
+}  
+
+private Type GetPageTypeForViewModel(Type viewModelType)  
+{  
+    var viewName = viewModelType.FullName.Replace("Model", string.Empty);  
+    var viewModelAssemblyName = viewModelType.GetTypeInfo().Assembly.FullName;  
+    var viewAssemblyName = string.Format(  
+                CultureInfo.InvariantCulture, "{0}, {1}", viewName, viewModelAssemblyName);  
+    var viewType = Type.GetType(viewAssemblyName);  
+    return viewType;  
+}  
+
+private Page CreatePage(Type viewModelType, object parameter)  
+{  
+    Type pageType = GetPageTypeForViewModel(viewModelType);  
+    if (pageType == null)  
+    {  
+        throw new Exception($"Cannot locate page type for {viewModelType}");  
+    }  
+
+    Page page = Activator.CreateInstance(pageType) as Page;  
+    return page;  
+}
+```
+
+`InternalNavigateToAsync` để điều hướng đến view-model, nhưng đầu tiên thì nó gọi `CreatePage` trước . Phương thức này tạo ra `view` tương ứng với `view-model` dựa trên cách thức như sau:
+
+* Các view thì giống với các view-models type khi biên dịch.
+* Views nằm trong .Views child namespace.
+* View models thì nằm trong .ViewModels child namespace.
+* Tên của View sẽ tương ứng với tên của view-model, sau khi remove text "Model", giống như hàm `GetPageTypeForViewModel` phía trên.
+
+Khi 1 view được khởi tạo, thì nó liên kết tương ứng vơi view-model. [Xem thêm tự động tạo view model với `ViewModelLocator MVVM`]()
+
+```csharp
+private static void OnAutoWireViewModelChanged(BindableObject bindable, object oldValue, object newValue)  
+{  
+    var view = bindable as Element;  
+    if (view == null)  
+    {  
+        return;  
+    }  
+
+    var viewType = view.GetType();  
+    var viewName = viewType.FullName.Replace(".Views.", ".ViewModels.");  
+    var viewAssemblyName = viewType.GetTypeInfo().Assembly.FullName;  
+    var viewModelName = string.Format(  
+        CultureInfo.InvariantCulture, "{0}Model, {1}", viewName, viewAssemblyName);  
+
+    var viewModelType = Type.GetType(viewModelName);  
+    if (viewModelType == null)  
+    {  
+        return;  
+    }  
+    var viewModel = _container.Resolve(viewModelType);  
+    view.BindingContext = viewModel;  
+}
+```
+
+Xử lý của `InternalNavigateToAsync`:
+
+* Nếu view được tạo là `LoginView` thì tạo CustomNavigationView mới & gán cho MainPage của App.
+* Else : lấy MainPage (App) hiện tại ép về CustomNavigationView (navigatePage) nếu là navigatePage khác null thì sẽ đẩy page được tạo vào stack của navigatePage. Ko thì tạo ra MainPage mới là navigatePage.
+
+> Điều này đảm bảo trong suốt quá trình điều hướng page, thì các page được thêm đúng vào stack của navigation kể cả các page null hoặc có dữ liệu.
+
+
 > TIP
 
 > Consider caching pages. Page caching results in memory consumption for views that are not currently displayed. However, without page caching it does mean that XAML parsing and construction of the page and its view model will occur every time a new page is navigated to, which can have a performance impact for a complex page. For a well-designed page that does not use an excessive number of controls, the performance should be sufficient. However, page caching might help if slow page loading times are encountered.
 
+Sau cùng khi tạo được view-model thì sẽ gọi hàm : InitializeAsync để khởi tạo view-model ( với tham số đầu vào)
+
 ### Điều hướng khi app được khởi chạy ( App Lauched):
+
+Khi app chạy lần đầu tiên thì sẽ gọi:
+
+```csharp
+private Task InitNavigation()  
+{  
+    var navigationService = ViewModelLocator.Resolve<INavigationService>();  
+    return navigationService.InitializeAsync();  
+}
+```
+
+Phương thức này sẽ tạo ra 1 đối tượng NavigationService nằm trong DI Container trước, và trả về liên kết đến đối tượng đó và sau đó mới gọi InitializeAsync().
+
+Phương thức InitializeAsync như sau
+
+```csharp
+public Task InitializeAsync()  
+{  
+    if (string.IsNullOrEmpty(Settings.AuthAccessToken))  
+        return NavigateToAsync<LoginViewModel>();  
+    else  
+        return NavigateToAsync<MainViewModel>();  
+}
+```
+
 
 ### Truyền parameter thông qua Navigation:
 
+Ví dụ như sau:
+`ProfileViewModel` sẽ chứa 1 `OrderDetailCommand` nó sẽ thực hiện khi user select 1 order trong `ProfilePage`. Và trong view-model nó sẽ gọi hàm : `OrderDetailAsync`. Hàm này sẽ điều hướng đến `OrderDetailViewModel` với tham số dữ liệu `Order` được truyền vào như sau:
+
+```csharp
+private async Task OrderDetailAsync(Order order)  
+{  
+    await NavigationService.NavigateToAsync<OrderDetailViewModel>(order);  
+}
+```
+
+Khi NavigationService tạo `OrderDetailView` thì view-model tương ứng cũng được tạo ra như phần xử lý điều hướng phía trên & nó sẽ BindingContext để liên kết view & view-model ... và cuối cùng sẽ gọi hàm `InitializeAsync` có truyền tham số ...
+
+Và view-model được kế thừa từ ViewModelBase nên có thể override lại `InitializeAsync` để lấy được tham số truyền vào như sau:
+
+```csharp
+public override async Task InitializeAsync(object navigationData)  
+{  
+    if (navigationData is Order)  
+    {  
+        ...  
+        Order = await _ordersService.GetOrderAsync(  
+                        Convert.ToInt32(order.OrderNumber), authToken);  
+        ...  
+    }  
+}
+```
+
+
 ### Gọi Navigation sử dụng behavior ( Command)
 
+Navigation thường được gọi từ view, xử lý tương tác với người dùng, nên thường sẽ xử lý như sau ở xaml file:
+
+```xml
+<WebView ...>  
+    <WebView.Behaviors>  
+        <behaviors:EventToCommandBehavior  
+            EventName="Navigating"  
+            EventArgsConverter="{StaticResource WebNavigatingEventArgsConverter}"  
+            Command="{Binding NavigateCommand}" />  
+    </WebView.Behaviors>  
+</WebView>
+```
+
+Khi runtime, `EventToCommandBehavior` sẽ tương tác với WebView. Khi `WebView` điều hướng đến webpage sự kiện `Navigating` sẽ được gọi. và sẽ thực hiện `NavigateCommand` ở trong `LoginViewModel`. 
+
+Mặc định thì tham số của sự kiện sẽ được truyền vào Command. Data này sẽ được chuyển đổi thông qua converter để lấy được URL thông qua WebNavigatingEventArgs. Cuối cùng, khi `NavigationCommand` được thực hiện thì Url of the web page sẽ được truyền như 1 tham số để đăng ký Action.
+
+```csharp
+private async Task NavigateAsync(string url)  
+{  
+    ...          
+    await NavigationService.NavigateToAsync<MainViewModel>();  
+    await NavigationService.RemoveLastFromBackStackAsync();  
+    ...  
+}
+```
+
+Điều hướng vào MainPAge & sẽ remove LoginPage khỏi stack.
+
 ### Xác nhận hoặc hủy bỏ điều hướng.
+
+1 App có thể cần người dùng nhập liệu trước khi điều hướng, ví dụ nhập user / pass correct thì mới được điều hướng vào trang tiếp theo. Điều này có thể thực hiện ở lớp model-view để xử lý ..
 
 ## Tổng kết
 
