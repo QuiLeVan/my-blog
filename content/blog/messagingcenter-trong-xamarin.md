@@ -79,7 +79,7 @@ MessagingCenter.Unsubscribe<MainPage, string>(this, "Hi");
 ### Defining a Message:
 
 ```csharp
-public class MessengerKeys  
+public class MessageKeys  
 {  
     // Add product to basket  
     public const string AddProduct = "AddProduct";  
@@ -95,7 +95,7 @@ public class MessengerKeys
 ### Publishing a Message
 
 ```csharp
-MessagingCenter.Send(this, MessengerKeys.AddProduct, catalogItem);
+MessagingCenter.Send(this, MessageKeys.AddProduct, catalogItem);
 ```
 
 ## Subscribing to a Message
@@ -119,5 +119,5 @@ MessagingCenter.Subscribe<CatalogViewModel, CatalogItem>(
 ###  Unsubscribing from a Message
 
 ```csharp
-MessagingCenter.Unsubscribe<CatalogViewModel, CatalogItem>(this, MessengerKeys.AddProduct);
+MessagingCenter.Unsubscribe<CatalogViewModel, CatalogItem>(this, MessageKeys.AddProduct);
 ```
