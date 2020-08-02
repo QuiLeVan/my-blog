@@ -63,3 +63,61 @@ MessagingCenter.Unsubscribe<MainPage>(this, "Hi");
 //hoặc
 MessagingCenter.Unsubscribe<MainPage, string>(this, "Hi");
 ```
+
+
+
+## Ví dụ để sử dụng MessagingCenter để liên lạc giữa các thành phần với nhau trong 1 ứng dụng enterprise:
+
+Ứng dụng di động eShopOnContainers sử dụng lớp MessagingCenter để liên lạc giữa các thành phần được ghép lỏng lẻo. Ứng dụng xác định ba thông báo:
+
+\* Message `AddProduct` được phát bởi `CatalogViewModel` khi có 1 item được add vào trong giỏ hàng. Ngược lại, `BasketViewModel` sẽ đăng ký lắng nghe message để tăng số lượng item trong giỏ hàng khi nó thay đổi. Và `BasketViewModel` cũng có khả năng hủy đăng ký lắng nghe.
+
+\* `Filter` message được phát bởi CatalogViewModel khi user apply filter. Ngược lại, CatalogView đăng ký để lắng nghe message & update UI để phù hợp với nhu cầu cần hiển thị.
+
+\* The `ChangeTab` message is published by the `MainViewModel` class when the `CheckoutViewModel` navigates to the `MainViewModel` following the successful creation and submission of a new order. In return, the `MainView` class subscribes to the message and updates the UI so that the **My profile** tab is active, to show the user's orders.
+
+### Defining a Message:
+
+```csharp
+public class MessengerKeys  
+{  
+    // Add product to basket  
+    public const string AddProduct = "AddProduct";  
+
+    // Filter  
+    public const string Filter = "Filter";  
+
+    // Change selected Tab programmatically  
+    public const string ChangeTab = "ChangeTab";  
+}
+```
+
+### Publishing a Message
+
+```csharp
+MessagingCenter.Send(this, MessengerKeys.AddProduct, catalogItem);
+```
+
+## Subscribing to a Message
+
+```csharp
+MessagingCenter.Subscribe<CatalogViewModel, CatalogItem>(  
+    this, MessageKeys.AddProduct, async (sender, arg) =>  
+{  
+    BadgeCount++;  
+
+    await AddCatalogItemAsync(arg);  
+});
+```
+
+
+
+> Tip
+>
+> Consider using immutable payload data. Don't attempt to modify the payload data from within a callback delegate because several threads could be accessing the received data simultaneously. In this scenario, the payload data should be immutable to avoid concurrency errors.
+
+###  Unsubscribing from a Message
+
+```csharp
+MessagingCenter.Unsubscribe<CatalogViewModel, CatalogItem>(this, MessengerKeys.AddProduct);
+```
