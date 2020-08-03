@@ -39,3 +39,17 @@ Tuy nhiên vẫn có nhược điểm dưới đây:
 * Atomic transactions between multiple microservices usually aren't possible. Therefore, business requirements must embrace eventual consistency between microservices.
 * In production, there is an operational complexity in deploying and managing a system compromised of many independent services.
 * Direct client-to-microservice communication can make it difficult to refactor the contracts of microservices. For example, over time how the system is partitioned into services might need to change. A single service might split into two or more services, and two services might merge. When clients communicate directly with microservices, this refactoring work can break compatibility with client apps.
+
+##  Containerization
+
+![](../assets/containersvsvirtualmachines.png)
+
+So sánh giữa virtual machines & containers.
+
+eShopOnContainers sử dụng Docker để làm máy chủ cho các dịch vụ của backend:
+
+![](../assets/microservicesarchitecture.png)
+
+## Giao tiếp giữa mobile app & backend service:
+
+![](../assets/directclienttomicroservicecommunication.png)
