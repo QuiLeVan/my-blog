@@ -63,7 +63,7 @@ private static void OnAutoWireViewModelChanged(BindableObject bindable, obj
 
 > Tip
 >
-> Sử dụng `View Model Locator`  để dễ thay thế. Cái này được dùng như việc thay thế Dependence Injection chẳng hạn như để kiểm thử hoặc design time data.
+> Sử dụng `View Model Locator`  để dễ thay thế mock service khi dùng Dependence Injection chẳng hạn như để kiểm thử hoặc design time data.
 
 ### Thay đổi View để đáp ứng việc thay đổi ViewModel / Model
 
