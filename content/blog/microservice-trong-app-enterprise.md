@@ -53,3 +53,9 @@ eShopOnContainers sử dụng Docker để làm máy chủ cho các dịch vụ 
 ## Giao tiếp giữa mobile app & backend service:
 
 ![](../assets/directclienttomicroservicecommunication.png)
+
+Mobile App sẽ sử dụng từng dịch vụ ở phía backend dựa vào endpoint cho từng service riêng. Mỗi service sẽ có database riêng & nó có thể hoạt động riêng lẻ với nhau. 
+
+## Liên lạc giữa Microservices với nhau ??
+
+![](../assets/microservicesarchitecturewitheventbus.png)
