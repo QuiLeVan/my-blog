@@ -16,6 +16,54 @@ Có thể nói bản thân **REST** không phải là một loại công nghệ.
 
 ## Sử dụng RESTful APIs
 
+RESTful không quy định logic code ứng dụng và không giới hạn bởi ngôn ngữ lập trình ứng dụng, bất kỳ ngôn ngữ hoặc framework nào cũng có thể sử dụng để thiết kế một **RESTful API**.
+
+![](../assets/restful-rest-diagram-api.jpg)
+
+
+
+* GET (SELECT): Trả về một Resource hoặc một danh sách Resource.
+* POST (CREATE): Tạo mới một Resource.
+* PUT (UPDATE): Cập nhật thông tin cho Resource.
+* DELETE (DELETE): Xoá một Resource.
+
+Những phương thức hay hoạt động này thường được gọi là **CRUD** tương ứng với Create, Read, Update, Delete – Tạo, Đọc, Sửa, Xóa
+
+**RESTful API** không sử dụng [](https://topdev.vn/blog/session-la-gi/)session và cookie, nó sử dụng một access_token với mỗi request. Dữ liệu trả về thường có cấu trúc như sau:
+
+```jsonld
+{
+    "data" : {
+        "id": "1",
+        "name": "TopDev"
+    }
+}
+```
+
+
+
+## Status code
+
+Khi chúng ta request một API nào đó thường thì sẽ có vài status code để nhận biết sau:
+
+* 200 OK – Trả về thành công cho những phương thức GET, PUT, PATCH hoặc DELETE.
+* 201 Created – Trả về khi một Resouce vừa được tạo thành công.
+* 204 No Content – Trả về khi Resource xoá thành công.
+* 304 Not Modified – Client có thể sử dụng dữ liệu cache.
+* 400 Bad Request – Request không hợp lệ
+* 401 Unauthorized – Request cần có auth.
+* 403 Forbidden – bị từ chối không cho phép.
+* 404 Not Found – Không tìm thấy resource từ URI
+* 405 Method Not Allowed – Phương thức không cho phép với user hiện tại.
+* 410 Gone – Resource không còn tồn tại, Version cũ đã không còn hỗ trợ.
+* 415 Unsupported Media Type – Không hỗ trợ kiểu Resource này.
+* 422 Unprocessable Entity – Dữ liệu không được xác thực
+* 429 Too Many Requests – Request bị từ chối do bị giới hạn
+
+> Luôn sử dụng version để khi bạn cần nâng cấp API mà vẫn hỗ trợ các API cũ.
+
+
+
 ### Tạo Web Requests
 
 #### Tạo 1 GET Request ?
