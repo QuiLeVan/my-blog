@@ -35,14 +35,12 @@ Những phương thức hay hoạt động này thường được gọi là **C
 {
     "data" : {
         "id": "1",
-        "name": "TopDev"
+        "name": "Xamarin Form"
     }
 }
 ```
 
-
-
-## Status code
+### Status code
 
 Khi chúng ta request một API nào đó thường thì sẽ có vài status code để nhận biết sau:
 
@@ -62,9 +60,11 @@ Khi chúng ta request một API nào đó thường thì sẽ có vài status co
 
 > Luôn sử dụng version để khi bạn cần nâng cấp API mà vẫn hỗ trợ các API cũ.
 
-
+Trong eShopOnContainers mobile app thì dùng mẫu MVVM, và model đại diện cho những thể hiện của các thành phần trong ứng dụng. Những lớp điều khiển & lưu giữ trong eShopOnContainers (controller and repository class) thường gửi & nhận về nhiều đối tượng model này khi work với microservice. Nên sử dụng DTO (data transfer objects) : giữ tất cả data được truyền giữa mobile app & microservice.  Lợi ích lớn nhất của DTO là : khi truyền & nhận dữ liệu từ web service thì truyền hoặc nhận nhiều dữ liệu trong 1 request, làm giảm số lượng request.
 
 ### Tạo Web Requests
+
+App eShopOnContainers dùng `HttpClient` để tạo request thông qua HTTP cùng với với JSON  sẽ được truyền đi. Lớp này cung cấp chức năng gửi các yêu cầu ko đồng bộ & nhận phản hồi HTTP từ 1 resource được xác định URI. Lớp `HttpResponseMessage` đại điện cho 1 phản hồi nhận về (HTTP response) từ REST API sau khi 1 request HTTP được gửi đi. Nó chứa thông tin response gồm : status code, header, bất kỳ dữ liệu nào nằm trong body. Lớp HttpContent đại diện cho HTTP body & content header như : `Content-Type`  & `Content-Encoding`. Dữ liệu sẽ được đọc thông qua: `ReadAs` method như: `ReadAsStringAsync` & `ReadAsByteArrayAsync.` Tùy theo loại dữ liệu mà sẽ dùng phương thức nào ..
 
 #### Tạo 1 GET Request ?
 
