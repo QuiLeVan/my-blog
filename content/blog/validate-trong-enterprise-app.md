@@ -439,4 +439,4 @@ This DataTrigger monitors the UserName.IsValid property, and if it's value becom
        Style="{StaticResource ValidationErrorLabelStyle}" />
 ```
 
-> **Nguồn từ**: *https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/validation*
+> **Nguồn từ**: * <https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/validation> *
