@@ -121,3 +121,53 @@ private async Task NavigateAsync(string url)
 ```
 
 Lưu được access Token & Navigate đến MainViewModel...
+
+## Authorization
+
+Sau khi Authentication thì cần Authorization (ủy quyền) để truy cập dữ liệu bằng các API.
+
+Code backend để hạn chế quyền truy cập thì vd như sau:
+
+```csharp
+[Authorize]  
+public class BasketController : Controller  
+{  
+    ...  
+}
+```
+
+Nếu 1 user mà chưa unauthorized truy cập đến function mà đánh dấu là \[Authorize] thì trả về error 401.
+
+Xem thêm quá trình dưới để hiểu rõ:
+
+![](https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/authentication-and-authorization-images/authorization.png)
+
+### Configuring IdentityServer to Perform Authorization
+
+### Making Access Requests to APIs từ phía Mobile App:
+
+demo:
+
+```csharp
+var authToken = Settings.AuthAccessToken;  
+Order = await _ordersService.GetOrderAsync(Convert.ToInt32(order.OrderNumber), authToken);
+```
+
+tương tự trường hợp khác:
+
+```csharp
+var authToken = Settings.AuthAccessToken;  
+await _basketService.UpdateBasketAsync(new CustomerBasket  
+{  
+    BuyerId = userInfo.UserId,   
+    Items = BasketItems.ToList()  
+}, authToken);
+```
+
+
+
+```csharp
+httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+```
+
+The `DefaultRequestHeaders` property of the `HttpClient` class exposes the headers that are sent with each request, and the access token is added to the `Authorization` header prefixed with the string `Bearer`. When the request is sent to a RESTful API, the value of the `Authorization` header is extracted and validated to ensure that it's sent from a trusted issuer, and used to determine whether the user has permission to invoke the API that receives it.
