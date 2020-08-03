@@ -16,4 +16,22 @@ Trong ứng dụng mẫu eShopOnContainers, thực hiện việc đồng bộ ki
 
 *chú thích:*
 
+## Tạo ra các qui chuẩn cho việc xác thực đầu vào ( validation rule):
 
+Thêm các Validation Rule vào các thuộc tính cần được xác thực
+
+## Kích hoạt Validation:
+
+Trong eShopOnContainers thì có thể kích hoạt việc xác thực thủ công hoặc được kích hoạt tự động thông qua notifcation khi các thuộc tính bị thay đổi.
+
+### Kích hoạt validation thủ công:
+
+### Kích hoạt tự động:
+
+## Hiển thị Error trong khi Validate dữ liệu:
+
+### Hiển thị highlight phần input không hợp lệ
+
+### Hiển thị thông báo error không hợp lệ
+
+> **Nguồn từ**: *https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/validation*
