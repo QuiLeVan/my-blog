@@ -16,7 +16,7 @@ Microservice nên bao gồm các dịch vụ đủ nhỏ để tạo nên servic
 
 \- payment processing
 
-Microservice mở rộng để đáp ứng nhu cầu:
+## Microservice mở rộng để đáp ứng nhu cầu:
 
 ![](../assets/microservicesapp.png)
 
@@ -24,7 +24,7 @@ Microservice có thể mở rộng gần như là tức thì. Cho phép ứng d�
 
 Mô hình kinh điển cho việc mở rộng để cân bằng tải là : tầng stateless (ko trạng thái) với dữ liệu được chia sẽ bên ngoài để lưu những dữ liệu ko thay đổi (cache data). Các Stateful microservices quản lý các data ko thay đổi thường được lưu ở máy chủ cục bộ nơi chạy các microservice để tránh chi phí truy cập mạng & sự phức tạp khi quản lý chồng chéo các service với nhau. Điều này giúp việc xử lý data nhah nhất có thể và có thể loại bỏ được hệ thống lưu trữ. 
 
-Lợi ích khi sử dụng microservice:
+## Lợi ích khi sử dụng microservice:
 
 * Each microservice is relatively small, easy to manage and evolve.
 * Each microservice can be developed and deployed independently of other services.
@@ -59,3 +59,21 @@ Mobile App sẽ sử dụng từng dịch vụ ở phía backend dựa vào endp
 ## Liên lạc giữa Microservices với nhau ??
 
 ![](../assets/microservicesarchitecturewitheventbus.png)
+
+
+
+1 Ứng dụng dựa trên microservice là 1 hệ thống phân tán (distributed system), nên nó có khả năng chạy trên nhiều máy. Mỗi phiên bản của dịch vụ là 1 process.  Nên các service phải giao tiếp bằng 1 inter-process như: HTTP, TCP, Advanced Message Queuing Protocol (AMQP), or binary protocols, phụ thuộc vào từng loại dịch vụ mà sử dụng loại nào.
+
+2 loại thường hay sử dụng là : HTTP dựa trên REST api & 1 loại : lightweight asynchronous messaging. (event ...)
+
+Asynchronous messaging: loại giao tiếp dựa trên sự kiện thì hay được sử dụng để giao tiếp giữa các microservice. Hoạt động: 1 service sẽ publish 1 sự kiện khi có điều gì đó xảy ra. Và những service khác thì đăng ký lắng nghe đến sự kiện này. Và sau đó khi microservice này nhận được event thì sẽ update, xử lý & sau đó sẽ có nhiều sự kiện khác được publish. Việc pushlisher-subcriber này thường được thực hiện với 1 event bus.
+
+Event bus là 1 kiểu publish-subcrib liên lạc giữa microservice mà ko yêu cầu các thành phần phải biết đến nhau như hình dưới:
+
+![](../assets/eventbus.png)
+
+The eShopOnContainers event bus, implemented using RabbitMQ, provides one-to-many asynchronous publish-subscribe functionality. This means that after publishing an event, there can be multiple subscribers listening for the same event.
+
+![](../assets/eventdrivencommunication.png)
+
+This one-to-many communication approach uses events to implement business transactions that span multiple services, ensuring eventual consistency between the services. An eventual-consistent transaction consists of a series of distributed steps. Therefore, when the user-profile microservice receives the UpdateUser command, it updates the user's details in its database and publishes the UserUpdated event to the event bus. Both the basket microservice and the ordering microservice have subscribed to receive this event, and in response update their buyer information in their respective databases.
