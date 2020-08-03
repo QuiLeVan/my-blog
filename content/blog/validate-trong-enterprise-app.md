@@ -244,7 +244,99 @@ sử dụng Binding mode TwoWay thì Validation sẽ được trigger khi entry 
 
 ## Hiển thị Error trong khi Validate dữ liệu:
 
+![validation-login](https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/validation-images/validation-login.png)
+
 ### Hiển thị highlight phần input không hợp lệ
+
+Xử dụng behavior để attach 1 LineColorBehavior vào Entry để hiển thị thông báo lỗi. sử dụng như sau:
+
+```xml
+<Entry Text="{Binding UserName.Value, Mode=TwoWay}">
+    <Entry.Style>
+        <OnPlatform x:TypeArguments="Style">
+            <On Platform="iOS, Android" Value="{StaticResource EntryStyle}" />
+            <On Platform="UWP" Value="{StaticResource UwpEntryStyle}" />
+        </OnPlatform>
+    </Entry.Style>
+    ...
+</Entry>
+```
+
+Và với Style được khai báo ở App sẽ thiết đặt như sau:
+
+```xml
+<Style x:Key="EntryStyle"  
+       TargetType="{x:Type Entry}">  
+    ...  
+    <Setter Property="behaviors:LineColorBehavior.ApplyLineColor"  
+            Value="True" />  
+    <Setter Property="behaviors:LineColorBehavior.LineColor"  
+            Value="{StaticResource BlackColor}" />  
+    ...  
+</Style>
+```
+
+Trong đó:
+ApplyLineColor & LineColor được attach vào property binding của LineColorBehavior
+
+```csharp
+public static class LineColorBehavior
+{
+    public static readonly BindableProperty ApplyLineColorProperty =
+        BindableProperty.CreateAttached("ApplyLineColor", typeof(bool), typeof(LineColorBehavior), false, 
+            propertyChanged: OnApplyLineColorChanged);
+
+    public static readonly BindableProperty LineColorProperty =
+        BindableProperty.CreateAttached("LineColor", typeof(Color), typeof(LineColorBehavior), Color.Default);
+...
+}
+```
+Và khi đó giá trị của ApplyLineColor được set hoặc thay đổi thì gọi OnApplyLineColorChanged method và nó được xử lý như sau:
+
+```csharp
+public static class LineColorBehavior  
+{  
+    ...  
+    private static void OnApplyLineColorChanged(  
+                BindableObject bindable, object oldValue, object newValue)  
+    {  
+        var view = bindable as View;  
+        if (view == null)  
+        {  
+            return;  
+        }  
+
+        bool hasLine = (bool)newValue;  
+        if (hasLine)  
+        {  
+            view.Effects.Add(new EntryLineColorEffect());  
+        }  
+        else  
+        {  
+            var entryLineColorEffectToRemove =   
+                    view.Effects.FirstOrDefault(e => e is EntryLineColorEffect);  
+            if (entryLineColorEffectToRemove != null)  
+            {  
+                view.Effects.Remove(entryLineColorEffectToRemove);  
+            }  
+        }  
+    }  
+}
+```
+EntryLineColorEffect được add vào trong Effect của view nếu  thuộc tính ApplyLineColor có giá trị true. Còn ko thì nó sẽ bị remove ra.
+
+EntryLineColorEffect là subclass của RoutingEffect:
+
+```csharp
+public class EntryLineColorEffect : RoutingEffect  
+{  
+    public EntryLineColorEffect() : base("eShopOnContainers.EntryLineColorEffect")  
+    {  
+    }  
+}
+```
+
+
 
 ### Hiển thị thông báo error không hợp lệ
 
