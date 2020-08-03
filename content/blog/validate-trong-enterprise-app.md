@@ -16,6 +16,55 @@ Trong ứng dụng mẫu eShopOnContainers, thực hiện việc đồng bộ ki
 
 *chú thích:*
 
+thuộc tính của view-model để xác thực dữ liệu được khai báo với type: `ValidatableObject<T>,` mỗi thể hiện của `ValidatableObject<T>` đều có 1 tập các validation là các qui tắc để xác thực dữ liệu hợp lệ hay ko ? List Validations : `List<IValidationRule<T>> Validations` . 
+
+Các rule này được tạo ra khi khơi tạo view-model và thêm vào các thuộc tính ValidatableObject. 
+
+```csharp
+//Login view-model
+private void AddValidations()
+{
+    _userName.Validations.Add(new IsNotNullOrEmptyRule<string> { ValidationMessage = "A username is required." });
+    _password.Validations.Add(new IsNotNullOrEmptyRule<string> { ValidationMessage = "A password is required." });
+}
+```
+
+Việc xác thực được gọi khi thuộc tính `ValidatableObject` gọi hàm Validate() để xử lý. Nếu có lỗi thì sẽ trả về list Error nằm ValidatableObject class.
+
+```csharp
+public class ValidatableObject<T> : ExtendedBindableObject, IValidity
+{
+    ...
+    public List<string> Errors
+    {
+        get
+        {
+            return _errors;
+        }
+        set
+        {
+            _errors = value;
+            RaisePropertyChanged(() => Errors);
+        }
+    }
+    ...
+    public bool IsValid
+    {
+        get
+        {
+            return _isValid;
+        }
+        set
+        {
+            _isValid = value;
+            RaisePropertyChanged(() => IsValid);
+        }
+    }
+}
+```
+
+Và IsValid property sẽ thay đổi & gửi notification đến view để cập nhật ...
+
 ## Tạo ra các qui chuẩn cho việc xác thực đầu vào ( validation rule):
 
 Thêm các Validation Rule vào các thuộc tính cần được xác thực
