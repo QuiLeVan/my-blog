@@ -336,8 +336,107 @@ public class EntryLineColorEffect : RoutingEffect
 }
 ```
 
+RoutingEffect là 1 platform-independent effect (hiệu ứng theo từng nền tảng ios-android..). EntryLineColorEffect sẽ gọi base constructor và truyền parameter là  1 group & tên hiệu ứng duy nhất cho nền tảng. `eShopOnContainers.EntryLineColorEffect`. Vd implement eShopOnContainers.EntryLineColorEffect cho ios:
+```csharp
+[assembly: ResolutionGroupName("eShopOnContainers")]  
+[assembly: ExportEffect(typeof(EntryLineColorEffect), "EntryLineColorEffect")]  
+namespace eShopOnContainers.iOS.Effects  
+{  
+    public class EntryLineColorEffect : PlatformEffect  
+    {  
+        UITextField control;  
+
+        protected override void OnAttached()  
+        {  
+            try  
+            {  
+                control = Control as UITextField;  
+                UpdateLineColor();  
+            }  
+            catch (Exception ex)  
+            {  
+                Console.WriteLine("Can't set property on attached control. Error: ", ex.Message);  
+            }  
+        }  
+
+        protected override void OnDetached()  
+        {  
+            control = null;  
+        }  
+
+        protected override void OnElementPropertyChanged(PropertyChangedEventArgs args)  
+        {  
+            base.OnElementPropertyChanged(args);  
+
+            if (args.PropertyName == LineColorBehavior.LineColorProperty.PropertyName ||  
+                args.PropertyName == "Height")  
+            {  
+                Initialize();  
+                UpdateLineColor();  
+            }  
+        }  
+
+        private void Initialize()  
+        {  
+            var entry = Element as Entry;  
+            if (entry != null)  
+            {  
+                Control.Bounds = new CGRect(0, 0, entry.Width, entry.Height);  
+            }  
+        }  
+
+        private void UpdateLineColor()  
+        {  
+            BorderLineLayer lineLayer = control.Layer.Sublayers.OfType<BorderLineLayer>()  
+                                                             .FirstOrDefault();  
+
+            if (lineLayer == null)  
+            {  
+                lineLayer = new BorderLineLayer();  
+                lineLayer.MasksToBounds = true;  
+                lineLayer.BorderWidth = 1.0f;  
+                control.Layer.AddSublayer(lineLayer);  
+                control.BorderStyle = UITextBorderStyle.None;  
+            }  
+
+            lineLayer.Frame = new CGRect(0f, Control.Frame.Height-1f, Control.Bounds.Width, 1f);  
+            lineLayer.BorderColor = LineColorBehavior.GetLineColor(Element).ToCGColor();  
+            control.TintColor = control.TextColor;  
+        }  
+
+        private class BorderLineLayer : CALayer  
+        {  
+        }  
+    }  
+}
+```
+
+Entry cũng add DataTrigger như sau:
+```xml
+<Entry Text="{Binding UserName.Value, Mode=TwoWay}">  
+    ...  
+    <Entry.Triggers>  
+        <DataTrigger   
+            TargetType="Entry"  
+            Binding="{Binding UserName.IsValid}"  
+            Value="False">  
+            <Setter Property="behaviors:LineColorBehavior.LineColor"   
+                    Value="{StaticResource ErrorColor}" />  
+        </DataTrigger>  
+    </Entry.Triggers>  
+</Entry>
+```
+
+This DataTrigger monitors the UserName.IsValid property, and if it's value becomes false, it executes the Setter, which changes the LineColor attached property of the LineColorBehavior attached behavior to red.
+
+![](https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/validation-images/validation-redline.png)
 
 
 ### Hiển thị thông báo error không hợp lệ
+
+```xml
+<Label Text="{Binding UserName.Errors, Converter={StaticResource FirstValidationErrorConverter}}"  
+       Style="{StaticResource ValidationErrorLabelStyle}" />
+```
 
 > **Nguồn từ**: *https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/validation*
