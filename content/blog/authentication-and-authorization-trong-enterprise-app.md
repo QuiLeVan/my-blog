@@ -35,11 +35,11 @@ Sự kết hợp của OpenID Connect và OAuth 2.0 kết hợp hai mối quan t
 
 #### Configuring Identity Resources
 
-#### Configuring Clients: 
+#### Configuring Clients:
 
 Nhận diện được client nào được gửi thông tin lên
 
-####  Configuring the Authentication Flow
+#### Configuring the Authentication Flow
 
 #### Thực hiện Authentication:
 
@@ -50,6 +50,7 @@ Khi sign-out
 ![](https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/authentication-and-authorization-images/sign-out.png)
 
 Sign-in Code:
+
 ```csharp
 private async Task SignInAsync()  
 {  
@@ -85,4 +86,38 @@ public string CreateAuthorizationRequest()
 }
 ```
 
-Sau khi thực hiện điều này thì :LoginUrl sẽ được trả về & gia trị isLogin = true, lúc đó Webview trong LoginView sẽ được enable.
+Sau khi thực hiện điều này thì :LoginUrl sẽ được trả về & gia trị isLogin = true, lúc đó Webview trong LoginView sẽ được enable. WebView binding data đến LoginUrl trong LoginViewModel và gọi behavior : NavigateCommand trong LoginViewModel & thực hiện process như sau:
+
+```csharp
+private async Task NavigateAsync(string url)
+{
+    var unescapedUrl = System.Net.WebUtility.UrlDecode(url);
+
+    if (unescapedUrl.Equals(GlobalSetting.Instance.LogoutCallback))
+    {
+        _settingsService.AuthAccessToken = string.Empty;
+        _settingsService.AuthIdToken = string.Empty;
+        IsLogin = false;
+        LoginUrl = _identityService.CreateAuthorizationRequest();
+    }
+    else if (unescapedUrl.Contains(GlobalSetting.Instance.Callback))
+    {
+        var authResponse = new AuthorizeResponse(url);
+        if (!string.IsNullOrWhiteSpace(authResponse.Code))
+        {
+            var userToken = await _identityService.GetTokenAsync(authResponse.Code);
+            string accessToken = userToken.AccessToken;
+
+            if (!string.IsNullOrWhiteSpace(accessToken))
+            {
+                _settingsService.AuthAccessToken = accessToken;
+                _settingsService.AuthIdToken = authResponse.IdentityToken;
+                await NavigationService.NavigateToAsync<MainViewModel>();
+                await NavigationService.RemoveLastFromBackStackAsync();
+            }
+        }
+    }
+}
+```
+
+Lưu được access Token & Navigate đến MainViewModel...
