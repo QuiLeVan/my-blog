@@ -65,9 +65,112 @@ public class ValidatableObject<T> : ExtendedBindableObject, IValidity
 
 Và IsValid property sẽ thay đổi & gửi notification đến view để cập nhật ...
 
-## Tạo ra các qui chuẩn cho việc xác thực đầu vào ( validation rule):
+## Tạo ra các rule để xác thực đầu vào ( validation rule):
 
-Thêm các Validation Rule vào các thuộc tính cần được xác thực
+Thêm các Validation Rule vào các thuộc tính cần được xác thực như sau:
+
+```csharp
+public interface IValidationRule<T>  
+{  
+    string ValidationMessage { get; set; }  
+    bool Check(T value);  
+}
+```
+
+Tạo ra 1 class rule implement interface IValidationRule:
+
+```csharp
+public class IsNotNullOrEmptyRule<T> : IValidationRule<T>  
+{  
+    public string ValidationMessage { get; set; }  
+
+    public bool Check(T value)  
+    {  
+        if (value == null)  
+        {  
+            return false;  
+        }  
+
+        var str = value as string;  
+        return !string.IsNullOrWhiteSpace(str);  
+    }  
+}
+```
+
+vd tiếp cho việc check email rule:
+
+```csharp
+public class EmailRule<T> : IValidationRule<T>  
+{  
+    public string ValidationMessage { get; set; }  
+
+    public bool Check(T value)  
+    {  
+        if (value == null)  
+        {  
+            return false;  
+        }  
+
+        var str = value as string;  
+        Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");  
+        Match match = regex.Match(str);  
+
+        return match.Success;  
+    }  
+}
+```
+
+> Note
+>
+> Property validation can sometimes involve dependent properties. An example of dependent properties is when the set of valid values for property A depends on the particular value that has been set in property B. To check that the value of property A is one of the allowed values would involve retrieving the value of property B. In addition, when the value of property B changes, property A would need to be revalidated.
+
+## Cách thêm các Validate Rule ở trên vào các thuộc tính ValidatableObject của view-model:
+
+Tạo properties để sử dụng Binding
+
+```csharp
+public ValidatableObject<string> UserName  
+{  
+    get  
+    {  
+        return _userName;  
+    }  
+    set  
+    {  
+        _userName = value;  
+        RaisePropertyChanged(() => UserName);  
+    }  
+}  
+
+public ValidatableObject<string> Password  
+{  
+    get  
+    {  
+        return _password;  
+    }  
+    set  
+    {  
+        _password = value;  
+        RaisePropertyChanged(() => Password);  
+    }  
+}
+```
+
+Để xác thực được dữ liệu đó thì phải add các rule được tạo ra ở trên vào các thuộc tính _user hoặc _password như sau:
+
+```csharp
+private void AddValidations()  
+{  
+    _userName.Validations.Add(new IsNotNullOrEmptyRule<string>   
+    {   
+        ValidationMessage = "A username is required."   
+    });  
+    _password.Validations.Add(new IsNotNullOrEmptyRule<string>   
+    {   
+        ValidationMessage = "A password is required."   
+    });  
+}
+```
 
 ## Kích hoạt Validation:
 
@@ -75,7 +178,69 @@ Trong eShopOnContainers thì có thể kích hoạt việc xác thực thủ cô
 
 ### Kích hoạt validation thủ công:
 
-### Kích hoạt tự động:
+Trong trường hợp app eShopOnContainers, sử dụng kích hoạt thủ công cho mock service (dịch vụ giả) như sau:
+
+User tap vào login button ở LoginView
+
+Command sẽ được gọi: MockSignInAsync sẽ thực hiện ở model-view: LoginViewModel & nó sẽ gọi hàm xác thực:
+
+```csharp
+private bool Validate()  
+{  
+    bool isValidUser = ValidateUserName();  
+    bool isValidPassword = ValidatePassword();  
+    return isValidUser && isValidPassword;  
+}  
+
+private bool ValidateUserName()  
+{  
+    return _userName.Validate();  
+}  
+
+private bool ValidatePassword()  
+{  
+    return _password.Validate();  
+}
+```
+
+Phương thức Validate của _userName, _password được gọi đến Validate của lơp ValidatableObject. và nó xử lý code như sau:
+
+```csharp
+public bool Validate()  
+{  
+    Errors.Clear();  
+
+    IEnumerable<string> errors = _validations  
+        .Where(v => !v.Check(Value))  
+        .Select(v => v.ValidationMessage);  
+
+    Errors = errors.ToList();  
+    IsValid = !Errors.Any();  
+
+    return this.IsValid;  
+}
+```
+
+```
+
+```
+
+Lúc này IsValid & Errors đều cập nhật & sẽ notification đến View.
+
+### Kích hoạt tự động sử dụng binding khi property change:
+
+```xml
+<Entry Text="{Binding UserName.Value, Mode=TwoWay}">  
+    <Entry.Behaviors>  
+        <behaviors:EventToCommandBehavior  
+            EventName="TextChanged"  
+            Command="{Binding ValidateUserNameCommand}" />  
+    </Entry.Behaviors>  
+    ...  
+</Entry>
+```
+
+sử dụng Binding mode TwoWay thì Validation sẽ được trigger khi entry input dữ liệu vào.
 
 ## Hiển thị Error trong khi Validate dữ liệu:
 
