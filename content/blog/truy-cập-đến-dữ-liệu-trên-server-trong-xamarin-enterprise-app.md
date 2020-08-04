@@ -139,6 +139,71 @@ public async Task<IActionResult> Items(
 
 #### Tạo 1 POST Request ?
 
+Xem demo:
+
+![](https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/accessing-remote-data-images/basketdata-large.png#lightbox)
+
+When an item is added to the shopping basket, the ReCalculateTotalAsync method in the BasketViewModel class is called. This method updates the total value of items in the basket, and sends the basket data to the basket microservice, as demonstrated in the following code example:
+
+```csharp
+private async Task ReCalculateTotalAsync()  
+{  
+    ...  
+    await _basketService.UpdateBasketAsync(new CustomerBasket  
+    {  
+        BuyerId = userInfo.UserId,   
+        Items = BasketItems.ToList()  
+    }, authToken);  
+}
+```
+
+This method calls the UpdateBasketAsync method of the BasketService instance that was injected into the BasketViewModel by Autofac. The following method shows the UpdateBasketAsync method:
+
+```csharp
+public async Task<CustomerBasket> UpdateBasketAsync(CustomerBasket customerBasket, string token)  
+{  
+    UriBuilder builder = new UriBuilder(GlobalSetting.Instance.BasketEndpoint);  
+    string uri = builder.ToString();  
+    var result = await _requestProvider.PostAsync(uri, customerBasket, token);  
+    return result;  
+}
+```
+
+This method builds the URI that identifies the resource the request will be sent to, and uses the RequestProvider class to invoke the POST HTTP method on the resource, before returning the results to the BasketViewModel. Note that an access token, obtained from IdentityServer during the authentication process, is required to authorize requests to the basket microservice. For more information about authorization
+
+```csharp
+public async Task<TResult> PostAsync<TResult>(  
+    string uri, TResult data, string token = "", string header = "")  
+{  
+    HttpClient httpClient = CreateHttpClient(token);  
+    ...  
+    var content = new StringContent(JsonConvert.SerializeObject(data));  
+    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");  
+    HttpResponseMessage response = await httpClient.PostAsync(uri, content);  
+
+    await HandleResponse(response);  
+    string serialized = await response.Content.ReadAsStringAsync();  
+
+    TResult result = await Task.Run(() =>  
+        JsonConvert.DeserializeObject<TResult>(serialized, _serializerSettings));  
+
+    return result;  
+}
+```
+
+This method calls the CreateHttpClient method, which returns an instance of the HttpClient class with the appropriate headers set. It then submits an asynchronous POST request to the resource identified by the URI, with the serialized basket data being sent in JSON format, and the response being stored in the HttpResponseMessage instance. The HandleResponse method is then invoked, which throws an exception if the response doesn't include a success HTTP status code. Then, the response is read as a string, converted from JSON to a CustomerBasket object, and returned to the BasketService
+
+> Phía Server :
+
+```csharp
+[HttpPost]  
+public async Task<IActionResult> Post([FromBody]CustomerBasket value)  
+{  
+    var basket = await _repository.UpdateBasketAsync(value);  
+    return Ok(basket);  
+}
+```
+
 #### Tạo 1 DELETE Request?
 
 ## Caching Data
