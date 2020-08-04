@@ -64,9 +64,78 @@ Trong eShopOnContainers mobile app thì dùng mẫu MVVM, và model đại diệ
 
 ### Tạo Web Requests
 
-App eShopOnContainers dùng `HttpClient` để tạo request thông qua HTTP cùng với với JSON  sẽ được truyền đi. Lớp này cung cấp chức năng gửi các yêu cầu ko đồng bộ & nhận phản hồi HTTP từ 1 resource được xác định URI. Lớp `HttpResponseMessage` đại điện cho 1 phản hồi nhận về (HTTP response) từ REST API sau khi 1 request HTTP được gửi đi. Nó chứa thông tin response gồm : status code, header, bất kỳ dữ liệu nào nằm trong body. Lớp HttpContent đại diện cho HTTP body & content header như : `Content-Type`  & `Content-Encoding`. Dữ liệu sẽ được đọc thông qua: `ReadAs` method như: `ReadAsStringAsync` & `ReadAsByteArrayAsync.` Tùy theo loại dữ liệu mà sẽ dùng phương thức nào ..
+App eShopOnContainers dùng `HttpClient` để tạo request thông qua HTTP cùng với với JSON  sẽ được truyền đi. Lớp này cung cấp chức năng gửi các yêu cầu ko đồng bộ & nhận phản hồi HTTP từ 1 resource được xác định URI. Lớp `HttpResponseMessage` đại điện cho 1 phản hồi nhận về (HTTP response) từ REST API sau khi 1 request HTTP được gửi đi. Nó chứa thông tin response gồm : status code, header, bất kỳ dữ liệu nào nằm trong body. Lớp `HttpContent` đại diện cho HTTP body & content header như : `Content-Type`  & `Content-Encoding`. Dữ liệu sẽ được đọc thông qua: `ReadAs` method như: `ReadAsStringAsync` & `ReadAsByteArrayAsync.` Tùy theo loại dữ liệu mà sẽ dùng phương thức nào ..
 
 #### Tạo 1 GET Request ?
+
+ví dụ qui trình GET CatalogAsync: 
+
+xem thêm: https://github.com/dotnet-architecture/eShopOnContainers/blob/dev/src/Mobile/eShopOnContainers/eShopOnContainers.Core/Services/Catalog/CatalogService.cs
+
+![](https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/accessing-remote-data-images/catalogdata.png)
+
+```csharp
+public async Task<TResult> GetAsync<TResult>(string uri, string token = "")  
+{  
+    HttpClient httpClient = CreateHttpClient(token);  
+    HttpResponseMessage response = await httpClient.GetAsync(uri);  
+
+    await HandleResponse(response);  
+    string serialized = await response.Content.ReadAsStringAsync();  
+
+    TResult result = await Task.Run(() =>   
+        JsonConvert.DeserializeObject<TResult>(serialized, _serializerSettings));  
+
+    return result;  
+}
+```
+
+This method calls the CreateHttpClient method, which returns an instance of the HttpClient class with the appropriate headers set. It then submits an asynchronous GET request to the resource identified by the URI, with the response being stored in the HttpResponseMessage instance. The HandleResponse method is then invoked, which throws an exception if the response doesn't include a success HTTP status code. Then the response is read as a string, converted from JSON to a CatalogRoot object, and returned to the CatalogService.
+
+```csharp
+private HttpClient CreateHttpClient(string token = "")  
+{  
+    var httpClient = new HttpClient();  
+    httpClient.DefaultRequestHeaders.Accept.Add(  
+        new MediaTypeWithQualityHeaderValue("application/json"));  
+
+    if (!string.IsNullOrEmpty(token))  
+    {  
+        httpClient.DefaultRequestHeaders.Authorization =   
+            new AuthenticationHeaderValue("Bearer", token);  
+    }  
+    return httpClient;  
+}
+```
+
+This method creates a new instance of the HttpClient class, and sets the Accept header of any requests made by the HttpClient instance to application/json, which indicates that it expects the content of any response to be formatted using JSON. Then, if an access token was passed as an argument to the CreateHttpClient method, it's added to the Authorization header of any requests made by the HttpClient instance, prefixed with the string Bearer. For more information about authorization
+
+> Lúc đó phía server sẽ hoạt động :
+
+When the GetAsync method in the RequestProvider class calls HttpClient.GetAsync, the Items method in the CatalogController class in the Catalog.API project is invoked, which is shown in the following code example:
+
+```csharp
+[HttpGet]  
+[Route("[action]")]  
+public async Task<IActionResult> Items(  
+    [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)  
+{  
+    var totalItems = await _catalogContext.CatalogItems  
+        .LongCountAsync();  
+
+    var itemsOnPage = await _catalogContext.CatalogItems  
+        .OrderBy(c=>c.Name)  
+        .Skip(pageSize * pageIndex)  
+        .Take(pageSize)  
+        .ToListAsync();  
+
+    itemsOnPage = ComposePicUri(itemsOnPage);  
+    var model = new PaginatedItemsViewModel<CatalogItem>(  
+        pageIndex, pageSize, totalItems, itemsOnPage);             
+
+    return Ok(model);  
+}
+```
 
 #### Tạo 1 POST Request ?
 
