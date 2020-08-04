@@ -44,6 +44,8 @@ db.createCollection('user')
 
 ## 2. Cài đặt Nodejs
 
+### 2.1 Cấu hình project server:
+
 ```shell
 npm init
 ```
@@ -81,6 +83,8 @@ Mongodb: để kết nối đến mongo database.
 ```shell
 npm install -save mongodb express body-parser crypto
 ```
+
+### 2.2 Edit code để chạy code server kết nối với mongodb
 
 Thêm file index.js vào root folder:
 
@@ -143,5 +147,82 @@ MongoClient.connect(url,{useNewUrlParser: true}, function(err, client){
     }
 
 })
+
+```
+
+Sau đó chạy lệnh: `node index.js`
+
+### 2.3 Thêm code để hoàn thiện các api để đăng ký user, Authentication ..
+
+#### Register Endpoint:
+
+Sẽ chứa 3 param được truyền lên từ User gồm: email, name, pass.
+
+Sau đó sẽ salt & hash password rồi lưu vào database.
+
+Update code như sau:
+
+```javascript
+//Register Endpoint ( correct parameter from user : name, email, password)
+        app.post('/register',(request, response, next)=>{
+            var postData = request.body;
+
+            var plaintPassword = postData.password;
+            var hashData = saltHashPassword(plaintPassword);
+
+            var password = hashData.passwordHash;//Save Password hash from sha512{}
+            var salt = hashData.salt; // Save Salt
+
+            var name = postData.name;
+            var email = postData.email;
+
+            var insertJson = {
+                'email': email,
+                'password': password,
+                'salt': salt,
+                'name': name
+            };
+
+            var db = client.db('xamarinnodejs'); // name db we create at first step (mongodb)
+
+            //check exist email
+            db.collection('user')// collection we create at first step
+                .find({'email':email}).count(function (err,number){
+                    if(number != 0){
+                        response.json('Email already exists');
+                        console.log('Email already exists');
+                    }
+                    else{
+                        //Insert data
+                        db.collection('user')
+                            .insertOne(insertJson, function (error, res){
+                                response.send('Registration success');
+                                console.log('Registration success');
+                            })
+                    }
+                })
+        })
+
+        //Start web Server
+        app.listen(3000,()=>{
+            console.log('Connected to mongodb, Web Service run on port : 3000');
+        })
+```
+
+#### Login Endpoint:
+
+Cách xử lý:
+
+Khi User gửi thông tin login lên server với email & password thì:
+
+\- Lấy thông tin email & password
+
+\- Lấy khóa 'salt' dựa trên email từ database.
+
+\- Hash password của User với salt. Nếu hash data trùng với password thì login thành công.
+
+Code:
+
+```
 
 ```
