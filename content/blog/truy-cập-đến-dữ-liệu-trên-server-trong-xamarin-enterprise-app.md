@@ -205,6 +205,51 @@ public async Task<IActionResult> Post([FromBody]CustomerBasket value)
 ```
 
 #### Tạo 1 DELETE Request?
+vd:
+
+![](https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/accessing-remote-data-images/checkoutdata.png)
+
+When the checkout process is invoked, the CheckoutAsync method in the CheckoutViewModel class is called. This method creates a new order, before clearing the shopping basket, as demonstrated in the following code example:
+
+```csharp
+private async Task CheckoutAsync()  
+{  
+    ...  
+    await _basketService.ClearBasketAsync(_shippingAddress.Id.ToString(), authToken);  
+    ...  
+}
+```
+This method calls the ClearBasketAsync method of the BasketService instance that was injected into the CheckoutViewModel by Autofac. The following method shows the ClearBasketAsync method:
+
+```csharp
+public async Task ClearBasketAsync(string guidUser, string token)  
+{  
+    UriBuilder builder = new UriBuilder(GlobalSetting.Instance.BasketEndpoint);  
+    builder.Path = guidUser;  
+    string uri = builder.ToString();  
+    await _requestProvider.DeleteAsync(uri, token);  
+}
+```
+This method builds the URI that identifies the resource that the request will be sent to, and uses the RequestProvider class to invoke the DELETE HTTP method on the resource. Note that an access token, obtained from IdentityServer during the authentication process, is required to authorize requests to the basket microservice.
+
+```csharp
+public async Task DeleteAsync(string uri, string token = "")  
+{  
+    HttpClient httpClient = CreateHttpClient(token);  
+    await httpClient.DeleteAsync(uri);  
+}
+```
+
+> Code phía server:
+
+```csharp
+[HttpDelete("{id}")]  
+public void Delete(string id)  
+{  
+    _repository.DeleteBasketAsync(id);  
+}
+```
+
 
 ## Caching Data
 
