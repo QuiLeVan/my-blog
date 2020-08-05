@@ -39,7 +39,6 @@ Tạo database với name : xamarinnodejs & Collection la: user
 ```shell
 use xamarinnodejs
 db.createCollection('user')
-
 ```
 
 ## 2. Cài đặt Nodejs
@@ -147,7 +146,6 @@ MongoClient.connect(url,{useNewUrlParser: true}, function(err, client){
     }
 
 })
-
 ```
 
 Sau đó chạy lệnh: `node index.js`
@@ -265,8 +263,6 @@ Thử test lại bằng post-man:
 
 ![](../assets/screen-shot-2020-08-05-at-07.08.33.png)
 
-
-
 Thử với command line trong mongo shell:
 
 ```shell
@@ -275,4 +271,38 @@ db.user.find()
 
 ## 3. Tạo Project Xamarin Form
 
-> Cập nhật sau
+Các bước tạo như 1 proj Xamarin Form bình thường.
+Hàm xử lý để login với backend vừa tạo:
+
+```csharp
+private async Task LoginAsync() {
+
+    HttpClient httpClient = new HttpClient();
+
+    var data = new LoginInfo();
+    data.email = _email;
+    data.password = _password;
+
+    var uri = "http://localhost:3000/login";
+    var content = new StringContent(JsonConvert.SerializeObject(data));
+    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+    HttpResponseMessage response = await httpClient.PostAsync(uri, content);
+
+    await HandleErrorResponse(response);
+
+    string serialized = await response.Content.ReadAsStringAsync();
+
+    await Application.Current.MainPage.DisplayAlert("Alert", serialized, "OK");
+}
+```
+
+Và LoginInfo.cs:
+
+```csharp
+public class LoginInfo
+{
+    public string email;
+    public string password;
+}
+```
