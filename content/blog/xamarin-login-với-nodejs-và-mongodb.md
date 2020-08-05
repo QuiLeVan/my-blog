@@ -223,6 +223,48 @@ Khi User gửi thông tin login lên server với email & password thì:
 
 Code:
 
+```javascript
+//Login Endpoint
+        app.post('/login',(request, response, next)=>{
+            var postData = request.body;
+
+            var email = postData.email;
+            var userPassword = postData.password;
+            
+            var db = client.db('xamarinnodejs'); // name db we create at first step (mongodb)
+
+            //check exist email
+            db.collection('user')// collection we create at first step
+                .find({'email':email}).count(function (err,number){
+                    if(number == 0){
+                        response.json('Email not exists');
+                        console.log('Email not exists');
+                    }
+                    else{
+                        //Find data
+                        db.collection('user')
+                            .findOne({'email': email}, function (error, user){
+                                var salt = user.salt; //Get Salt
+                                var hashed_password = checkHashPassword(userPassword, salt).passwordHash; // Hash password with salt
+                                var encrypted_password = user.password; // Get password save in database.
+                                if(hashed_password == encrypted_password){
+                                    response.json('Login success');
+                                    console.log('Login success');
+                                }
+                                else{
+                                    response.json('Wrong Pass');
+                                    console.log('Wrong Pass');
+                                }
+                            })
+                    }
+                })
+        })
 ```
 
-```
+Thử test lại bằng post-man:
+
+![](../assets/screen-shot-2020-08-05-at-07.08.33.png)
+
+## 3. Tạo Project Xamarin Form
+
+> Cập nhật sau
