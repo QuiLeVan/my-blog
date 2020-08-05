@@ -265,6 +265,14 @@ Thử test lại bằng post-man:
 
 ![](../assets/screen-shot-2020-08-05-at-07.08.33.png)
 
+
+
+Thử với command line trong mongo shell:
+
+```shell
+db.user.find()
+```
+
 ## 3. Tạo Project Xamarin Form
 
 > Cập nhật sau
