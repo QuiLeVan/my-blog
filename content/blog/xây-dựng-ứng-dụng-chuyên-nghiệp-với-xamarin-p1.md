@@ -25,13 +25,13 @@ Cách giải quyết vấn đề trên là tách rời các thành phần của 
 
 ***Nhưng nó cũng có 1 số vấn đề cần phải giải quyết khi tách rời các thành phần như:***
 
-* Làm thế nào để tách rời các thành phần UI & Business Logic (Xem phần [MVVM - trong Enterprise App]())
+* Làm thế nào để tách rời các thành phần UI & Business Logic (Xem phần [MVVM - trong Enterprise App](https://blog.quilv.com/blog/m%E1%BB%99t-s%E1%BB%91-ch%C3%BA-%C3%BD-v%E1%BB%9Bi-mvvm-trong-enterprise-app/))
 * Xác định các thành phần nào sẽ sử dụng dependency injection container ([Implement DI](https://blog.quilv.com/blog/h%C6%B0%E1%BB%9Bng-d%E1%BA%ABn-chi-ti%E1%BA%BFt-implement-dependence-injection-v%E1%BB%9Bi-unity-container-trong-xamarin/))
 * Xác định việc liên lạc giữa các thành phần trong ứng dụng ntn mà vẫn tạo được sự kết nối lỏng lẻo ( xem [MessengingCenter](https://blog.quilv.com/blog/messagingcenter-trong-xamarin/))
-* Quyết định việc điều hướng giữa các page, làm thế nào để điều hướng ( xem [Navigation]())
-* Xác thực đầu vào để tránh ứng dụng  bị lỗi ( xem [Validation]())
-* Xác định Auth & làm sao để bảo mật được thông tin ( xem [Authorization & Authentication]())
-* Truy cập dữ liệu từ xa, từ web service & cache chúng. ( xem [Access Remote Data]())
+* Quyết định việc điều hướng giữa các page, làm thế nào để điều hướng ( xem [Navigation](https://blog.quilv.com/blog/navigation-trong-1-ung-dung-enterprise/))
+* Xác thực đầu vào để tránh ứng dụng  bị lỗi ( xem [Validation](https://blog.quilv.com/blog/validate-trong-enterprise-app/))
+* Xác định Auth & làm sao để bảo mật được thông tin ( xem [Authorization & Authentication](https://blog.quilv.com/blog/authentication-and-authorization-trong-enterprise-app/))
+* Truy cập dữ liệu từ xa, từ web service & cache chúng. ( xem [Access Remote Data](https://blog.quilv.com/blog/truy-c%E1%BA%ADp-%C4%91%E1%BA%BFn-d%E1%BB%AF-li%E1%BB%87u-tr%C3%AAn-server-trong-xamarin-enterprise-app/))
 * Cách thức testing app. (xem [Unit Testing](https://blog.quilv.com/blog/unit-test-trong-enterprise-apps/) )
 
 Tất cả vấn đề trên sẽ được hướng dẫn lần lượt qua các phần của serial : Xây dựng ứng dụng chuyên nghiệp với Xamarin.
