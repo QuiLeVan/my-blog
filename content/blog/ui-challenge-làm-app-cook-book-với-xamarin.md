@@ -46,7 +46,7 @@ Figma link: [here](https://www.figma.com/file/PR7CQoRfOGStg2c7qNWQCt/Cook-Book?n
 * <https://github.com/kphillpotts/XDtoXF>: tool export XD to Xaml.
 * Sharpnado.MaterialFrame
 * Xamarin.Forms.PancakeView ( [https://github.com/sthewissen/Xamarin.Forms.PancakeView/wiki/)](https://github.com/sthewissen/Xamarin.Forms.PancakeView/wiki/Shapes)
-* FFImageLoading.Svg.Forms
+* FFImageLoading.Svg.Forms (tut: <https://github.com/luberda-molinet/FFImageLoading/wiki/Xamarin.Forms-API>)
 * [https://www.sharpnado.com/materialframe-blur/ (](https://www.sharpnado.com/materialframe-blur/)[https://github.com/roubachof/Sharpnado.MaterialFrame)](https://github.com/roubachof/Sharpnado.MaterialFrame)
 * Build font icon: <https://icomoon.io/app/#/select>
 
