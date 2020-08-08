@@ -306,3 +306,15 @@ public class LoginInfo
     public string password;
 }
 ```
+
+> Note:
+> Phải thêm các trường này vào info.plist cho ios :
+
+```xml
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+
+```
