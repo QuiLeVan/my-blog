@@ -307,14 +307,23 @@ public class LoginInfo
 }
 ```
 
-> Note:
+> **Note**:
+> ***IOS Build***:
 > Phải thêm các trường này vào info.plist cho ios :
-
-```xml
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-
-```
+>
+> ```xml
+> 	<key>NSAppTransportSecurity</key>
+> 	<dict>
+> 		<key>NSAllowsArbitraryLoads</key>
+> 		<true/>
+> 	</dict>
+> ```
+>
+> ***Android Build:***
+>
+> * Trong Proj android/Properties/AssemblyInfo.cs, thêm đoạn code sau:
+>
+>   ```csharp
+>   [assembly: Application(UsesCleartextTraffic = true)]
+>   ```
+> * Nếu chạy server ở local host thì dùng ip của máy debug, không dùng localhost / 127.0.0.1 ( nên là: 192.168.1.123 vd vậy)
