@@ -64,8 +64,81 @@ Bài này sẽ hướng dẫn cách thực hiện. Phía dưới cùng là nhữ
 
 #### Cách thức để override config: bằng code js từ các config.xml
 
+##### Thêm permission vào mainifest file:
+```xml
+<config-file target="AndroidManifest.xml" parent="/*">
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+</config-file>
+```
+##### Bật tắt permission runtime:
+
+```js
+cordova.requestPermission(CordovaPlugin plugin, int requestCode, String permission);
+```
+Ví dụ với Permission READ CONTACTS như sau:
+
+```js
+public static final String READ = Manifest.permission.READ_CONTACTS;
+
+public static final int SEARCH_REQ_CODE = 0;
+
+// Khi thực hiện code logic cần permission thì check:
+if(cordova.hasPermission(READ))
+{
+    search(executeArgs);
+}
+else
+{
+    getReadPermission(SEARCH_REQ_CODE);
+}
+
+// Code để xin cấp quyền permission như sau:
+protected void getReadPermission(int requestCode)
+{
+    cordova.requestPermission(this, requestCode, READ);
+}
+```
+
+Sau khi người dùng cấp quyền permisson thì sẽ có callback trả về & mỗi plugin Cordova phải implement nó:
+
+```js
+public void onRequestPermissionResult(int requestCode, String[] permissions,
+                                         int[] grantResults) throws JSONException
+{
+    for(int r:grantResults)
+    {
+        if(r == PackageManager.PERMISSION_DENIED)
+        {
+            this.callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, PERMISSION_DENIED_ERROR));
+            return;
+        }
+    }
+    switch(requestCode)
+    {
+        case SEARCH_REQ_CODE:
+            search(executeArgs);
+            break;
+        case SAVE_REQ_CODE:
+            save(executeArgs);
+            break;
+        case REMOVE_REQ_CODE:
+            remove(executeArgs);
+            break;
+    }
+}
+```
+Có thể xin cấp permission cho 1 group permission
+```js
+String [] permissions = { Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION };
+```
+Khi đó sẽ gửi request để cấp group permission như sau:
+```js
+cordova.requestPermissions(this, 0, permissions);
+```
+
 #### Cách thức add Framework để hoạt động trong codorva. ( Nghiên cứu về Firebase Plugin)
 
+Trực tiếp thông qua framework đến bundled library:
 ```xml
 	<platform name="android">
     ...
@@ -79,6 +152,11 @@ Bài này sẽ hướng dẫn cách thực hiện. Phía dưới cùng là nhữ
     ...
 	</platform>
 ```
+Hoặc cấu hình framework thông qua việc tùy chỉnh `.gradle` file như sau:
+```
+<framework src="relative/path/rules.gradle" custom="true" type="gradleReference" />
+```
+Xem thêm ở đây : link : cordova.apache.org/docs/en/latest/plugin_ref/spec.html#framework
 
 ### Nghiên cứu Plugin trong Construct3:
 
