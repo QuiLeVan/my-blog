@@ -339,3 +339,25 @@ init()
 Các function được gọi từ api ngoài ko được minification, nên phải gọi thông qua : `ga["function"](var1,var2)`
 
 ### Các bước chạy proj ở dạng Cordova sau khi export từ Construct 3:
+
+Khi đã build ra được proj dưới dạng cordova thì chạy lệnh:
+
+```
+cordova prepare
+```
+Lệnh này để khởi tạo & download các sdk cordova cần thiết theo cấu hình từ Construct3.
+
+```
+cordova requirements
+```
+
+Kiểm tra các tools để sẵn sàng để tiến hành build android / ios chưa.
+
+```
+cordova build android
+
+// hoặc
+cordova build ios
+```
+
+Để build ra từng platform.
