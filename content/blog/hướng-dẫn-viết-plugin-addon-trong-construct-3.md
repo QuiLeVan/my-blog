@@ -162,6 +162,8 @@ Xem thêm ở đây : link : cordova.apache.org/docs/en/latest/plugin_ref/spec.h
 
 #### Các chú ý khi làm việc với addon:
 
+- property variable : https://www.construct.net/en/make-games/manuals/addon-sdk/reference/pluginproperty
+
 ##### Ở chế độ developer:
 
 xem thêm : https://www.construct.net/en/make-games/manuals/addon-sdk/guide/enabling-developer-mode
