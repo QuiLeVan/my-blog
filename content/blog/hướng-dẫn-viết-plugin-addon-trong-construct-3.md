@@ -184,12 +184,14 @@ https://cordova.apache.org/docs/en/latest/plugin_ref/plugman.html
 
 ## Tao plugin Cordova:
 
-* Tao plugin: `plugman create --name pluginName --plugin_id pluginID --plugin_version 0.0.1`
-
-plugman install --platform <ios|android> --project <directory> --plugin <name|url|path> [--plugins_dir <directory>] [--www <directory>] [--variable <name>=<value> [--variable <name>=<value> ...]]
-
-submit have to :
+### Tao plugin
+```
+plugman create --name pluginName --plugin_id pluginID --plugin_version 0.0.1
+```
+### Để cài đặt vào proj cordova phải thêm package.json:
+```
 plugman createpackagejson /path/to/your/plugin
+```
 
 ### Tao proj cordova de test:
 
