@@ -281,7 +281,6 @@ Co 2 cách tạo proj:
 3. c3runtime folder file: actions.js
 
 ```js
-
 Action(number)
 
 {
@@ -289,5 +288,54 @@ Action(number)
 alert("Call Do Action Function = " + number);
 
 },
-
 ```
+
+## Cách để export build từ Construct 3 qua project dưới dạng Cordova có tích hợp SDK Cordova:
+
+### Cấu hình Addon ( Plugin) trong Construct 3 như sau:
+
+Ở file plugin.js: add như sau
+
+```js
+//constructor()
+constructor(){
+...
+this._info.AddCordovaPluginReference({
+    id: "cordova-plugin-device"
+});
+...
+}
+```
+
+Trong đó `cordova-plugin-device` là tên plugin mà cordova support.
+
+Ở dưới sẽ sử dụng plugin `cordova-plugin-gameanalytics` để demo code implement logic cho action.js
+
+Define các actions cần thiết theo hướng dẫn của cordova plugin, và trong code của action sẽ gọi đến plugin của cordova như sau:
+
+actions.js
+
+```javascript
+//Cần hàm khởi tạo sdk
+init()
+{
+  if(typeof window["GameAnalytics"]["initialize"] == "function"){
+    var ga = window["GameAnalytics"]
+    // lúc này có thể sử dụng được biến ga...
+  }
+  else if(typeof window["gameanalytics"]["GameAnalytics"] != "undefined")
+  {
+    var ga = window["gameanalytics"]["GameAnalytics"];
+    //...
+    ga["initialize"](this._gameKeyBrowser, this._secretKeyBrowser);
+  }
+  else{
+    console.log("initialize: GameAnalytics object not found");
+    return;
+  }
+}
+```
+
+Các function được gọi từ api ngoài ko được minification, nên phải gọi thông qua : `ga["function"](var1,var2)`
+
+### Các bước chạy proj ở dạng Cordova sau khi export từ Construct 3:
