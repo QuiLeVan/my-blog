@@ -185,10 +185,13 @@ https://cordova.apache.org/docs/en/latest/plugin_ref/plugman.html
 ## Tao plugin Cordova:
 
 ### Tao plugin
+
 ```
 plugman create --name pluginName --plugin_id pluginID --plugin_version 0.0.1
 ```
+
 ### Để cài đặt vào proj cordova phải thêm package.json:
+
 ```
 plugman createpackagejson /path/to/your/plugin
 ```
@@ -231,4 +234,60 @@ Co 2 cách tạo proj:
 2. Tạo proj riêng tách biệt để có thể implement SDK & debug, chuyên sau về từng platform. Dùng plugman cli để tạo proj ...
 
    * https://cordova.apache.org/docs/en/3.5.0/guide/platforms/android/index.html
-   *
+
+## Cách để add được params vào Action trong Plugin Construct 3
+
+1. file aces.json định nghĩa param trong action:
+
+```json
+...
+"action" :[
+...
+{
+  "id": "do-action",
+  "scriptName": "Action",
+  "highlight": false,
+  "params": [
+      {
+          "id": "number",
+          "type": "number"
+      }
+  ]
+}
+]
+...
+```
+
+2. Cấu hình file lang: lưu ý là phải có display-text : cấu hình như dưới mới ko bị lỗi khi add param number.
+
+```json
+...
+"actions": {
+"do-action": {
+      "list-name": "Do Action",
+      "display-text": "[i]{0}[/i] is a large number",
+      "description": "Do Action ABCD",
+      "params": {
+          "number": {
+              "name": "Number",
+              "desc": "The number to double."
+          }
+      }
+  }
+}
+...
+```
+
+3. c3runtime folder file: actions.js
+
+```js
+
+Action(number)
+
+{
+
+alert("Call Do Action Function = " + number);
+
+},
+
+```
