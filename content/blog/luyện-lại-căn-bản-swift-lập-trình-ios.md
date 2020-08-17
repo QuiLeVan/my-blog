@@ -50,7 +50,7 @@ case none
 
 ## Chap 2: Variables & Properties
 
-Tạo 1 biến:
+### Tạo 1 biến:
 
 Khai báo theo mẫu: var tiếp theo là tên, kiểu và giá trị:
 
@@ -65,4 +65,47 @@ let myInt = 10 // số này là kiểu Int
 let myDouble = 3.14 // số này là kiểu Double
 let myFloat: Float = 3.14 //trường hợp này phải khai báo mới hiểu Float
 
+```
+
+### Property Observers
+
+```swift
+var myProperty = 5 { 
+  willSet {
+    print("Will set to \(newValue). It was previously \(myProperty)") 
+  }
+
+  didSet {
+    print("Did set to \(myProperty). It was previously \(oldValue)")
+  }
+}
+
+myProperty = 6
+// prints: Will set to 6, It was previously 5 
+// prints: Did set to 6. It was previously 5
+```
+
+> Note:
+>
+> willSet & didSet sẽ ko được gọi trong các trường hợp:
+>
+> * Khởi tạo biến với giá trị ban đầu
+> * Gán giá trị bằng chính nó.
+
+Nhớ với willSet sẽ tương ứng với param là newValue, didSet sẽ tương ứng với param là oldValue.
+
+Trường hợp để dễ đọc hơn thì ta có thể đưa tham số vào willSet và didSet như vd dưới & tuyệt đối ko dùng newValue & oldValue để truyền vào willSet & didSet
+
+```swift
+var myFontSize = 10 
+{ 
+  willSet(newFontSize) 
+  {
+    print("Will set font to \(newFontSize), it was \(myFontSize)") 
+  }
+
+  didSet(oldFontSize) {
+    print("Did set font to \(myFontSize), it was \(oldFontSize)")
+  } 
+}
 ```
