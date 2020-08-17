@@ -4,9 +4,9 @@ date: 2020-08-17T22:51:19.017Z
 title: Luyện lại căn bản Swift & Lập trình IOS
 description: Ôn lại các kiến thức cơ bản về Swift & lập trình IOS
 ---
-# Mở đầu:
+## Chap 1: Mở đầu:
 
-## 1 chương trình nhỏ trong swift
+### 1 chương trình nhỏ trong swift
 
 có tên & đuôi là .swift như: greeting.swift
 
@@ -18,7 +18,7 @@ let mySurname = "Simpson"
 greet(name: myName, surname: mySurname)
 ```
 
-## Optional Value và Optional Enum:
+### Optional Value và Optional Enum:
 
 Kiểu Optional : kiểm tra giá trị có tồn tại hay ko. Kiểu như: "Có giá trị, thì nó sẽ bằng x" hoặc là "sẽ ko có giá trị nào cả"
 
@@ -46,4 +46,23 @@ case none
 /// The presence of a value, stored as `Wrapped`.
  case some(Wrapped)
 }
+```
+
+## Chap 2: Variables & Properties
+
+Tạo 1 biến:
+
+Khai báo theo mẫu: var tiếp theo là tên, kiểu và giá trị:
+
+```swift
+var myVariable: Int = 10
+myVariable = 20 // co thể thay đổi giá trị
+
+let myNumber: Int = 10 // giá trị này sẽ ko thay đổi khi khai báo let
+
+//Swift sẽ tự nhận loại khi gán giá trị
+let myInt = 10 // số này là kiểu Int
+let myDouble = 3.14 // số này là kiểu Double
+let myFloat: Float = 3.14 //trường hợp này phải khai báo mới hiểu Float
+
 ```
