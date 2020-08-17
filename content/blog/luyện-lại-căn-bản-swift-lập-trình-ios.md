@@ -109,3 +109,57 @@ var myFontSize = 10
   } 
 }
 ```
+
+### Lazy khi khai báo 1 biến:
+
+Khi khai báo lazy, thì chưa chạy thì nó chưa lưu gì cả. Rất có ích cho việc tiết kiệm memory khi tính toán của biến tốn nhiều chi phí tính toán. 
+
+```swift
+lazy var veryExpensiveVariable = expensiveMethod()
+
+// Thường được assign đến 1 giá trị trả về của closure
+lazy var veryExpensiveString = { () -> String in 
+  var str = expensiveStrFetch()
+  str.expensiveManipulation(integer: arc4random_uniform(5))
+  return str
+}()
+
+// khi khai báo lazy thì phải dùng var
+```
+
+### Các khai báo thông thường
+
+```swift
+class Dog {
+  var name = ""
+}
+//Sử dụng:
+let myDog = Dog()
+myDog.name = "Dog1"
+
+```
+
+hoặc:
+
+```swift
+var pi = 3.14
+class Circle {
+  var radius = 0.0
+  var circumference: Double 
+  {
+    get {
+      return pi * radius * 2
+    }
+    
+    set {
+      radius = newValue / pi / 2 }
+  } 
+}
+let circle = Circle()
+circle.radius = 1 
+print(circle.circumference) 
+// Prints "6.28" 
+circle.circumference = 14 
+print(circle.radius) 
+// Prints "2.229..."
+```
