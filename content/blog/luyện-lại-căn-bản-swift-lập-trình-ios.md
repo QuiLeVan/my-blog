@@ -193,3 +193,58 @@ class Pig: Animal {
 }
 // Loại này thường được dùng trong singleTon Pattern.
 ```
+
+## Other : Note những cái cần thiết:
+
+1. Tupe trong swift:
+
+```swift
+let testTuple = ("abc", 123, "bcd", 456, last: "fjalsjdfljasdf")
+
+print(testTuple.2)
+print(testTuple.last)
+```
+
+Sử dụng Tupe như 1 giá trị trả về trong function
+
+```swift
+func tupleReturner() -> (Int, String) {
+    return (3, "Hello")
+}
+let myTuple = tupleReturner()
+
+print(myTuple.0) // 3
+print(myTuple.1) // "Hello"
+
+//Hoặc:
+func tupleReturner() -> (anInteger: Int, aString: String) { 
+  return (3, "Hello")
+}
+let myTuple = tupleReturner() 
+print(myTuple.anInteger) // 3 
+print(myTuple.aString) // "Hello"
+
+```
+
+Sử dụng typealias để đặt tên cho tupe type:
+
+```swift
+// Define a circle tuple by its center point and radius
+let unitCircle: (center: (x: CGFloat, y: CGFloat), radius: CGFloat) = ((0.0, 0.0), 1.0)
+func doubleRadius(ofCircle circle:(center: (x: CGFloat, y: CGFloat), radius: CGFloat))
+        -> (center: (x: CGFloat, y: CGFloat), radius: CGFloat){
+            return (circle.center, circle.radius * 2.0)
+}
+
+//Biểu diễn như trên rất dài
+//Nếu như dùng nhiều chỗ thì có thể sử dụng typealias như sau:
+// Define a circle tuple by its center point and radius
+typealias Circle = (center: (x: CGFloat, y: CGFloat), radius: CGFloat)
+let unitCircle: Circle = ((0.0, 0.0), 1)
+
+func doubleRadius(ofCircle circle: Circle) -> Circle {
+    // Aliased tuples also have access to value labels in the original tuple type.
+    return (circle.center, circle.radius * 2.0)
+}
+
+```
