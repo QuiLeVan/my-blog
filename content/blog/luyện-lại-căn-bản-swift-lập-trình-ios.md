@@ -652,4 +652,48 @@ child.delegate = self
 
 ```
 
+Mặc định trong swift thì `protocol` không chấp nhận việc cài đặt optional function. Điều này chỉ có thể làm được khi protocol được đánh dấu `@objc` & `optional` đặt ở method. 
+
+Ví dụ: `UITableView` cài đặt behavior chung cho 1 table view trong iOS, nhưng mà user phải cài đặt 2 delegate : `UITableViewDelegate` & `UITableViewDataSource`. 
+
+Những hàm mà ko được đánh dấu là `optional` trong protocol thì bắt buộc phải implement.
+
+#### Implementing Hashable protocol
+
+```swift
+struct Cell {
+    var row: Int
+    var col: Int
+    init(_ row: Int, _ col: Int) {
+        self.row = row
+        self.col = col
+    }
+}
+
+extension Cell: Hashable {
+    // Satisfy Hashable requirement
+    var hashValue: Int {
+        get {
+            return row.hashValue^col.hashValue
+            
+        }
+    }
+    // Satisfy Equatable requirement
+    static func ==(lhs: Cell, rhs: Cell) -> Bool {
+        return lhs.col == rhs.col && lhs.row == rhs.row
+    }
+}
+
+// Now we can make Cell as key of dictonary
+var dict = [Cell : String]()
+dict[Cell(0, 0)] = "0, 0"
+dict[Cell(1, 0)] = "1, 0"
+dict[Cell(0, 1)] = "0, 1"
+
+// Also we can create Set of Cells
+var set = Set<Cell>()
+set.insert(Cell(0, 0))
+set.insert(Cell(1, 0))
+```
+
 
