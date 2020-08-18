@@ -163,3 +163,33 @@ circle.circumference = 14
 print(circle.radius) 
 // Prints "2.229..."
 ```
+
+### Type Properties
+
+là những property  dựa trên chính type của nó, ko phải theo instance. Khai báo nó với từ khóa static như sau:
+
+```swift
+struct Dog {
+  static var noise = "Bark!"
+}
+
+print(Dog.noise) // Bark!
+```
+
+Có thể áp dụng được cho dạng thuộc tính dạng lưu trữ & thuộc tính dạng tính toán ( dựa vào các thuộc tính lưu trữ trong type/ class để tính toán ra giá trị & nó ko dùng để lưu trữ)
+
+Trong class thì có thể dùng từ khóa class để thay thế cho static & dùng nó để có thể override giá trị. Nhưng nó chỉ có thể áp dụng cho thuộc tính dạng tính toán. Vd:
+
+```swift
+class Animal {
+    class var noise: String {
+      return "Animal noise!" 
+    }
+}
+class Pig: Animal {
+  override class var noise: String { 
+    return "Oink oink!"
+  } 
+}
+// Loại này thường được dùng trong singleTon Pattern.
+```
