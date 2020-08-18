@@ -196,7 +196,7 @@ class Pig: Animal {
 
 ## Other : Note những cái cần thiết:
 
-1. Tupe trong swift:
+### 1. Tupe trong swift:
 
 ```swift
 let testTuple = ("abc", 123, "bcd", 456, last: "fjalsjdfljasdf")
@@ -247,4 +247,34 @@ func doubleRadius(ofCircle circle: Circle) -> Circle {
     return (circle.center, circle.radius * 2.0)
 }
 
+```
+
+#### Những lợi ích khi sử dụng tuple:
+
+Swap 2 giá trị với nhau ko cần dùng biến tạm:
+
+```swift
+var a = "Marty McFly"
+var b = "Emmett Brown"
+
+(a, b) = (b, a)
+print(a) // "Emmett Brown"
+print(b) // "Marty McFly"
+```
+
+Sử dụng trong swtich case như sau:
+
+```swift
+let switchTuple = (firstCase: true, secondCase: false)
+
+switch switchTuple {
+    case (true, false):
+        // do something
+    case (true, true):
+        // do something
+    case (false, true):
+        // do something
+    case (false, false):
+        // do something
+}
 ```
