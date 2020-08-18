@@ -435,3 +435,34 @@ let ships : Set<Starship> = [
   Starship(name:"Defiant") 
 ]
 ```
+
+### Dictionary trong swift
+
+Cách khai báo:
+
+```swift
+var books : Dictionary<Int, String> = Dictionary<Int, String>()
+
+//hoặc
+var books = [Int: String]()
+//hoặc
+var books: [Int: String] = [:]
+//hoặc
+var books: [Int: String] = [1: "Book 1", 2: "Book 2"]
+
+// Try cập:
+let bookName = books[1]
+
+for book in books.values { 
+  print("Book Title: \(book)")
+}
+//output: Book Title: Book 2
+//output: Book Title: Book 1
+
+for bookNumbers in books.keys { 
+  print("Book number: \(bookNumber)")
+}
+// outputs:
+// Book number: 1
+// Book number: 2
+```
