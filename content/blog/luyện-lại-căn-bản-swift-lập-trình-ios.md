@@ -580,13 +580,21 @@ protocol MyProtocol {
 }
 ```
 
-Sử dụng:
+#### Sử dụng:
 
 ```swift
 struct MyStruct : MyProtocol {
 // Implement the protocol's requirements here
 }
+
+
 class MyClass : MyProtocol {
+// Implement the protocol's requirements here
+}
+
+
+enum MyEnum : MyProtocol {
+case caseA, caseB, caseC
 // Implement the protocol's requirements here
 }
 ```
@@ -614,3 +622,34 @@ func doStuff(object: MyProtocol) {
 }
 let items : [MyProtocol] = [MyStruct(), MyClass(), MyEnum.caseA]
 ```
+
+#### Delegate pattern: sử dụng protocol
+
+ví dụ có 2 class Parent() , class Child(), và bây giờ mình muốn có thông báo đến thằng cha khi thằng con có sự thay đổi.
+
+Sẽ implement như sau:
+
+```swift
+protocol ChildDelegate: class {
+    func childDidSomething()
+}
+
+class Child {
+    weak var delegate: ChildDelegate?
+}
+
+class Parent: ChildDelegate { 
+   ...
+   func childDidSomething() 
+   { 
+      print("Yay!")
+   }
+}
+
+//Trong Parent xử lý:
+let child = Child() 
+child.delegate = self
+
+```
+
+
