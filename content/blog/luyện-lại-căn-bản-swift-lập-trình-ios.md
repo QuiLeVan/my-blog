@@ -321,3 +321,48 @@ var dir = Direction(oppositeTo: .down) // Direction.up
 dir.changeDirection() // Direction.left
 let opposite = dir.opposite // Direction.right
 ```
+
+## Struct trong Swift
+
+```swift
+struct DeliveryRange {
+  var range: Double
+  let center: Location
+}
+
+let storeLocation = Location(latitude: 44.9871, longitude: -93.2758)
+var pizzaRange = DeliveryRange(range: 200,center: storeLocation)
+
+print(pizzaRange.range) // 200
+print(pizzaRange.center.latitude) // 44.9871
+
+pizzaRange.range = 250
+```
+
+#### Mutating trong struct ?
+
+Phương thức trong struct mà thay đổi được giá trị trong struct đó phải khai báo từ khóa mutating trước function đó, vd:
+
+```swift
+struct Counter {
+  private var value = 0
+  mutating func next() { 
+    value += 1
+  } 
+}
+
+//sử dụng: chỉ áp dụng được cho khai báo var
+var counter = Counter() 
+counter.next()
+```
+
+Struct ko thể kế thừa. Khác với class :
+
+```swift
+class MyView: NSView { } // works
+
+struct MyInt: Int { } // error: inheritance from non-protocol type 'Int'
+
+//nhưng với protocol thì ok
+struct Vector: Hashable { ... } // works
+```
