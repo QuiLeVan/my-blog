@@ -561,3 +561,56 @@ print(userEnteredSpeed ?? defaultSpeed) // outputs "Fast"
 
 ```
 
+### Protocols trong swift
+
+- Gần giống với interface trong các ngôn ngữ khác.
+- Protocol có thể kế thừa từ Protocol khác
+- Protocol thì qui định các interfaces mà có thể được implmenet bởi struct, class hoặc enum
+
+```swift
+protocol MyProtocol {
+    init(value: Int)
+    func doSomething() -> Bool
+    var message: String { get }
+    var value: Int { get set }
+    subscript(index: Int) -> Int { get }
+    static func instructions() -> String
+    static var max: Int { get }
+    static var total: Int { get set }
+}
+```
+
+Sử dụng:
+
+```swift
+struct MyStruct : MyProtocol {
+// Implement the protocol's requirements here
+}
+class MyClass : MyProtocol {
+// Implement the protocol's requirements here
+}
+```
+
+1 protocol có thể được define default implementation thông qua extension như sau:
+
+```swift
+extension MyProtocol {
+// default implementation of doSomething() -> Bool
+// conforming types will use this implementation if they don't define their own
+    func doSomething() -> Bool {
+        print("do something!")
+        return true
+    }
+}
+
+```
+
+Protocol có thể sử dụng như 1 type:
+
+```swift
+func doStuff(object: MyProtocol) {
+    // All of MyProtocol's requirements are available on the object print(object.message)
+    print(object.doSomething())
+}
+let items : [MyProtocol] = [MyStruct(), MyClass(), MyEnum.caseA]
+```
