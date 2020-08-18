@@ -532,3 +532,32 @@ func fallbackIfNil(str: String?) -> String {
 print(fallbackIfNil(str: "Hi")) // Prints "Hi"
 print(fallbackIfNil(str: nil)) // Prints "Fallback String"
 ```
+
+### Condition trong Swift
+
+Guard:
+
+```swift
+func printNum(num: Int) {
+    guard num == 10 else {
+        print("num is not 10")
+        return
+        
+    }
+    print("num is 10")
+}
+```
+
+Nil-Coalescing Operator: ??
+
+```swift
+let defaultSpeed:String = "Slow"
+var userEnteredSpeed:String? = nil
+
+print(userEnteredSpeed ?? defaultSpeed) // outputs "Slow"
+
+userEnteredSpeed = "Fast"
+print(userEnteredSpeed ?? defaultSpeed) // outputs "Fast"
+
+```
+
