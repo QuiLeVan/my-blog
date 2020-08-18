@@ -278,3 +278,46 @@ switch switchTuple {
         // do something
 }
 ```
+
+### Enum trong Swift:
+
+Có nhiều khác biệt hơn so với các ngôn ngữ khác:
+
+```swift
+protocol ChangesDirection {
+    mutating func changeDirection()
+}
+enum Direction {
+    // enumeration cases
+    case up, down, left, right
+    // initialise the enum instance with a case
+    
+    // that's in the opposite direction to another
+    init(oppositeTo otherDirection: Direction) {
+        self = otherDirection.opposite
+    }
+    // computed property that returns the opposite direction
+    var opposite: Direction {
+        switch self {
+        case .up:
+            return .down
+        case .down:
+            return .up
+        case .left:
+            return .right
+        case .right:
+            return .left
+            
+        }
+    }
+}
+// extension to Direction that adds conformance to the ChangesDirection protocol
+extension Direction: ChangesDirection {
+    mutating func changeDirection() {
+self = .left }
+}
+
+var dir = Direction(oppositeTo: .down) // Direction.up
+dir.changeDirection() // Direction.left
+let opposite = dir.opposite // Direction.right
+```
