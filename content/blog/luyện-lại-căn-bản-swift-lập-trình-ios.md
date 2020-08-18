@@ -322,7 +322,7 @@ dir.changeDirection() // Direction.left
 let opposite = dir.opposite // Direction.right
 ```
 
-## Struct trong Swift
+### Struct trong Swift
 
 ```swift
 struct DeliveryRange {
@@ -365,4 +365,73 @@ struct MyInt: Int { } // error: inheritance from non-protocol type 'Int'
 
 //nhưng với protocol thì ok
 struct Vector: Hashable { ... } // works
+```
+
+### Sets trong Swift:
+
+là 1 collection ko có thứ tự chứa những giá trị duy nhất & cùng 1 kiểu. vd:
+
+```swift
+var colors = Set<String>()
+
+// có thể khai báo giá trị ban đầu:
+var favoriteColors: Set<String> = ["Red", "Blue", "Green", "Blue"] //{"Blue", "Green", "Red"}
+
+
+```
+
+Cách làm việc với set
+
+```swift
+//intersect
+let favoriteColors: Set = ["Red", "Blue", "Green"]
+let newColors: Set = ["Purple", "Orange", "Green"]
+
+let intersect = favoriteColors.intersect(newColors) // a AND b
+// intersect = {"Green"}
+
+// -------------------------------------------
+//Tất cả giá trị với set -> union
+let union = favoriteColors.union(newColors) // a OR b
+// union = {"Red", "Purple", "Green", "Orange", "Blue"}
+
+// -------------------------------------------
+// Lấy những giá trị riêng giữa 2 set -> exclusiveOr
+let exclusiveOr = favoriteColors.exclusiveOr(newColors) // a XOR b
+// // exclusiveOr = {"Red", "Purple", "Orange", "Blue"}
+
+// -------------------------------------------
+// Giá trị ko tồn tại trong set - >subtract
+let subtract = favoriteColors.subtract(newColors) // a - (a AND b) 
+// subtract = {"Blue", "Red"}
+
+// -------------------------------------------
+favoriteColors.insert("Orange")
+let removedColor = favoriteColors.remove("Red")
+
+if favoriteColors.contains("Blue") 
+{ 
+  print("Who doesn't like blue!")
+}
+
+```
+
+Cách để add custom type vào set
+
+```swift
+struct Starship: Hashable {
+  let name: String
+  var hashValue: Int { return name.hashValue }
+}
+
+func ==(left:Starship, right: Starship) -> Bool { 
+  return left.name == right.name
+}
+
+//Tạo Set của Starship
+let ships : Set<Starship> = [
+  Starship(name:"Enterprise D"), 
+  Starship(name:"Voyager"), 
+  Starship(name:"Defiant") 
+]
 ```
