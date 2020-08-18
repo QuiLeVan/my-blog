@@ -466,3 +466,69 @@ for bookNumbers in books.keys {
 // Book number: 1
 // Book number: 2
 ```
+
+### Optionals trong Swift:
+
+? và ! là 2 cách thể hiện Optionals trong Swift, vd:
+
+
+```swift
+var numberOne: Int! = nil 
+
+var numberTwo: Int? = nil
+```
+`?` được dùng trong trường hợp giá trị chưa chắc là `nil` hay ko, trường hợp này thường sử dụng để chuyển String thành số, để check hợp lệ hay ko
+
+```swift
+let str1 = "42"
+let num1: Int? = Int(str1) // 42
+let str2 = "Hello, World!"
+let num2: Int? = Int(str2) // nil
+```
+
+`!` được sử dụng trong trường hợp chắc chắn là type sẽ có giá trị đúng.
+
+```swift
+//myButton will not be accessed until viewDidLoad is called, 
+//so a ! optional can be used here
+var myButton: UIButton!
+override func viewDidLoad(){
+    self.myButton = UIButton(frame: self.view.frame)
+    self.myButton.backgroundColor = UIColor.redColor()
+    self.view.addSubview(self.myButton)
+}
+```
+Cách sử dụng Optional:
+
+```swift
+//nếu number là nil thì sẽ ko bị crash
+var number: Int?
+if let unwrappedNumber = number {
+    // Has `number` been assigned a value?
+    print("number: \(unwrappedNumber)")// Will not enter this line
+} else
+{
+    print("number was not assigned a value")
+}
+```
+
+Hoặc sử dụng guard statement:
+
+```swift
+var number: Int?
+guard let unwrappedNumber = number else {
+    return
+}
+print("number: \(unwrappedNumber)")
+
+```
+
+Nil Coalescing:
+
+```swift
+func fallbackIfNil(str: String?) -> String {
+    return str ?? "Fallback String"
+}
+print(fallbackIfNil(str: "Hi")) // Prints "Hi"
+print(fallbackIfNil(str: nil)) // Prints "Fallback String"
+```
